@@ -1,37 +1,49 @@
 import { addDays, addMonths, format } from "date-fns";
 import Decimal from "decimal.js-light";
 
-export const generarCuotas = (fechaInicio, modoPago, importePrestamo, nroCuotas, TEM, pagoMensualTotal, comision) => {
+export const generarCuotas = (fechaInicio, modoPago, importePrestamo, nroCuotas, TEM, pagoMensualTotal, comision, feriados) => {
+
+    //feriados: [{'dd/MM', 'dd/MM', ...}]
+
     // Validación de entradas
     if (!fechaInicio || !modoPago || !importePrestamo || !nroCuotas || !pagoMensualTotal) return [];
 
     // Clona la fecha inicial para no modificar el objeto original
-    let fecha = new Date(fechaInicio);
+    let fechaBase = new Date(fechaInicio);
     const dividendo = getDividendo(nroCuotas);
     const importeNum = new Decimal(importePrestamo);
     let saldoCapital = new Decimal(importeNum);
     const tasaEfectivaMensual = new Decimal(Math.pow(1 + (TEM / 100), 1 / dividendo) - 1);
     const cuotas = [];
 
-    // Simulación de feriados (debe integrarse con API real si se requiere)
-    const feriados = []; // Ejemplo: ['28/09', '01/01']
 
     for (let i = 0; i < nroCuotas; i++) {
-        // Avanza la fecha según el modo de pago
+        // Calcula la fecha base para el pago de la cuota
         if (i !== 0) {
             if (modoPago === 'mensual') {
-                fecha = addMonths(fecha, 1);
+                // Siempre intenta el mismo día del mes que la fecha inicial
+                fechaBase = addMonths(fechaBase, 1);
             } else if (modoPago === 'diario') {
-                fecha = addDays(fecha, 1);
+                fechaBase = addDays(fechaBase, 1);
             } else if (modoPago === 'quincenal') {
-                fecha = addDays(fecha, 15);
+                fechaBase = addDays(fechaBase, 15);
             } else if (modoPago === 'semanal') {
-                fecha = addDays(fecha, 7);
+                fechaBase = addDays(fechaBase, 7);
             }
         }
-        // Evita sábados, domingos y feriados
-        while (fecha.getDay() === 0 || fecha.getDay() === 6 || feriados.includes(format(fecha, 'dd/MM'))) {
+        // Ajusta solo si la fecha base cae en feriado/sábado/domingo
+        let fecha = new Date(fechaBase);
+        let intentos = 0;
+        while (
+            (feriados && feriados.includes(format(fecha, 'dd/MM')))
+            || fecha.getDay() === 0
+            || fecha.getDay() === 6
+        ) {
             fecha = addDays(fecha, 1);
+            intentos++;
+            // Si el nuevo día también es feriado, sábado o domingo, sigue sumando
+            // Si se sale del mes, rompe el ciclo (evita bucle infinito)
+            if (intentos > 31) break;
         }
 
         // Comision por periodo

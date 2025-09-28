@@ -1,5 +1,5 @@
 <template>
-    <div class="sticky top-0 bg-gradient-mask z-50">
+    <div class="sticky top-0 bg-white/30 backdrop-blur-md dark:bg-zinc-950/30 z-50">
         <div class="py-2 flex justify-between items-center px-4">
             <div v-if="activeEmpresa" v-motion :initial="{ opacity: 0, x: 30 }" :enter="{ opacity: 1, x: 0 }"
                 :transition="{ duration: 0.3 }" class="flex items-center space-x-2">
