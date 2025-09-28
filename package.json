@@ -21,6 +21,7 @@
     "primeicons": "^7.0.0",
     "primevue": "^4.3.9",
     "tailwindcss": "^4.1.13",
+    "topbar": "^3.0.0",
     "vue": "^3.5.18",
     "vue-awesome-paginate": "^1.2.0",
     "vue-router": "4",

@@ -2,8 +2,8 @@
     <div class="w-full flex space-x-1">
         <div ref="select" class="w-full flex flex-col items-center relative">
             <div :class="open
-                    ? 'border-2 border-primary-500 dark:border-primary-500'
-                    : 'border border-zinc-200 dark:border-zinc-700 hover:border-primary-300 hover:dark:border-primary-600',
+                ? 'border ring-3 ring-primary-300/50 dark:ring-primary-500/20 border-primary-500 dark:border-primary-400'
+                : 'border border-zinc-200 dark:border-zinc-700 hover:border-primary-500 hover:dark:border-primary-300',
                 dark
                     ? 'dark:bg-zinc-950'
                     : 'dark:bg-zinc-950'" class="w-full flex bg-white dark:text-white  rounded-md pl-2  ">

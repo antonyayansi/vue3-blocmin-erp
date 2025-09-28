@@ -12,10 +12,9 @@
                         aria-label="Menu" />
                 </div>
                 <router-link to="/"
-                    class="text-zinc-700 hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-300 transition-colors duration-300">
+                    class="text-zinc-700 hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-300">
                     <h1 class="text-xl font-medium">{{ activeEmpresa?.razon_social }}</h1>
                 </router-link>
-
             </div>
             <div class="flex space-x-2 items-center">
                 <!-- Dark Mode Toggle -->

@@ -9,7 +9,7 @@
                     class="h-screen sticky top-0 overflow-y-auto border-r border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-900">
                     <div
                         class="w-full sticky top-0 backdrop-blur-sm bg-white/20 dark:bg-zinc-900/20 z-50 text-center py-4 border-b border-zinc-200 dark:border-zinc-700">
-                        <h2 class="text-primary-500 dark:text-white text-lg font-semibold">
+                        <h2 class="text-zinc-700 dark:text-white text-lg font-semibold">
                             <img src="/img/logo.jpeg" alt="Logo Tukuy Asistencia" class="h-8 inline-block mr-2">
                             {{ activeEmpresa?.nombre_comercial }}
                         </h2>

@@ -1,3 +1,5 @@
+import routerCreditos from '../modules/creditos/router';
+
 export default {
     name: 'system',
     path: '/',
@@ -12,6 +14,11 @@ export default {
             name: 'cajas',
             path: '/cajas',
             component: () => import('../modules/cajas/views/Caja.vue')
+        },
+        {
+            name: 'creditos',
+            path: '/creditos',
+            ...routerCreditos
         }
     ]
 }
