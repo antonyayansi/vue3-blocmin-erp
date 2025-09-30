@@ -1,3 +1,4 @@
+import routerClientes from '../modules/clientes/router';
 import routerCreditos from '../modules/creditos/router';
 
 export default {
@@ -9,6 +10,11 @@ export default {
             name: 'home',
             path: '',
             component: () => import('../views/Home.vue')
+        },
+        {
+            name: 'clientes',
+            path: '/clientes',
+            ...routerClientes
         },
         {
             name: 'cajas',

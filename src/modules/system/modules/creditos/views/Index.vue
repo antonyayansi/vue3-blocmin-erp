@@ -14,7 +14,7 @@
 
                 <!-- Botón -->
                 <div class="w-full flex justify-end md:w-auto">
-                    <Button @click="newCredito()" label="Nueva credito" icon="pi pi-plus" size="small" class="" />
+                    <Button @click="newCredito()" label="Nuevo credito" icon="pi pi-plus" size="small" class="" />
                 </div>
             </div>
         </div>
