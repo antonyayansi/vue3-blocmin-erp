@@ -10,11 +10,11 @@
                 <span>{{ new_credito.id ? 'Editar Credito' : 'Nuevo Credito' }}</span>
             </div>
         </template>
-        <div class="grid grid-cols-4 gap-2">
+        <div v-if="!new_credito.id" class="grid grid-cols-4 gap-2">
             <div class="col-span-4 md:col-span-2 flex flex-col space-y-1">
                 <label class="text-xs font-medium text-gray-700 dark:text-gray-300">Cliente</label>
-                <Select v-model="new_credito.clientes_id" :options="comboClientes" mode="offline"
-                    placeholder="Seleccione un cliente" />
+                <Select v-model="new_credito.clientes_id" :options="comboClientes" mode="offline" id="clientes_id"
+                    @selected="onFocus('importe')" placeholder="Seleccione un cliente" />
             </div>
             <div class="col-span-2 md:col-span-1 flex flex-col space-y-1">
                 <label
@@ -28,23 +28,27 @@
             </div>
             <div class="col-span-2 md:col-span-1 flex flex-col space-y-1">
                 <label class="text-xs font-medium text-gray-700 dark:text-gray-300">Importe</label>
-                <InputText v-model="new_credito.importe" size="small" />
+                <InputText v-model="new_credito.importe" id="importe" @keypress.enter="onFocus('nro_cuotas')"
+                    size="small" />
             </div>
             <div class="col-span-2 md:col-span-1 flex flex-col space-y-1">
                 <label class="text-xs font-medium text-gray-700 dark:text-gray-300">N° Cuotas</label>
-                <InputText v-model="new_credito.nro_cuotas" @keyup="keyTasaEAandEM()" size="small" />
+                <InputText v-model="new_credito.nro_cuotas" id="nro_cuotas" @keypress.enter="onFocus('cuota_definida')"
+                    @keyup="keyTasaEAandEM()" size="small" />
             </div>
             <div class="col-span-2 md:col-span-1 flex flex-col space-y-1">
                 <label class="text-xs font-medium text-gray-700 dark:text-gray-300">Cuota Fija</label>
-                <InputText v-model="new_credito.cuota_definida" @keyup="keyTasaEAandEM()" size="small" />
+                <InputText v-model="new_credito.cuota_definida" id="cuota_definida"
+                    @keypress.enter="onFocus('comision')" @keyup="keyTasaEAandEM()" size="small" />
             </div>
             <div class="col-span-2 md:col-span-1 flex flex-col space-y-1">
                 <label class="text-xs font-medium text-gray-700 dark:text-gray-300">Comisión total</label>
-                <InputText v-model="new_credito.comision" size="small" />
+                <InputText v-model="new_credito.comision" size="small" id="comision"
+                    @keypress.enter="onFocus('modo_pago', true)" />
             </div>
-            <div class="col-span-2 md:col-span-1 flex flex-col space-y-1">
+            <div class=" col-span-2 md:col-span-1 flex flex-col space-y-1">
                 <label class="text-xs font-medium text-gray-700 dark:text-gray-300">Tipo Pago</label>
-                <Select v-model="new_credito.modo_pago" :options="[
+                <Select v-model="new_credito.modo_pago" id="modo_pago" @selected="onFocus('fecha')" :options="[
                     { descripcion: 'Diario', codigo: 'diario' },
                     { descripcion: 'Semanal', codigo: 'semanal' },
                     { descripcion: 'Quincenal', codigo: 'quincenal' },
@@ -53,22 +57,25 @@
             </div>
             <div class="col-span-2 md:col-span-1 flex flex-col space-y-1">
                 <label class="text-xs font-medium text-gray-700 dark:text-gray-300">Primer pago</label>
-                <InputText v-model="new_credito.fecha_primer_pago" size="small" type="date" />
+                <InputText v-model="new_credito.fecha_primer_pago" id="fecha" @keypress.enter="onFocus('aporte')"
+                    size="small" type="date" />
             </div>
             <div class="col-span-2 md:col-span-1 flex flex-col space-y-1">
                 <label class="text-xs font-medium text-gray-700 dark:text-gray-300">Aporte</label>
-                <InputText v-model="new_credito.aporte" size="small" />
+                <InputText v-model="new_credito.aporte" size="small" id="aporte" @keypress.enter="onFocus('ahorro')" />
             </div>
             <div class="col-span-2 md:col-span-1 flex flex-col space-y-1">
                 <label class="text-xs font-medium text-gray-700 dark:text-gray-300">Ahorro</label>
-                <InputText v-model="new_credito.ahorro" size="small" />
+                <InputText v-model="new_credito.ahorro" size="small" id="ahorro" @keypress.enter="generateCuotas" />
             </div>
         </div>
         <div class="mt-2 flex space-x-2 items-center justify-start">
-            <Button @click="generateCuotas" label="Calcular cuotas" severity="info" size="small"
+            <Button v-if="!new_credito.id" @click="generateCuotas" label="Calcular cuotas" severity="info" size="small"
                 icon="pi pi-calendar" />
-            <Button v-if="new_credito.cuotas.length" @click="generateCuotas" label="Guardar credito" severity="success"
-                size="small" icon="pi pi-save" />
+            <Button v-if="new_credito.cuotas.length && !new_credito.id" @click="onSubmit" label="Guardar credito"
+                severity="success" size="small" icon="pi pi-save" />
+            <Button v-if="new_credito.id" @click="getCronogramaPDF(new_credito.id)" label="Cronograma" size="small"
+                icon="pi pi-print" />
         </div>
 
         <div v-if="new_credito.cuotas.length" class="mt-4">
@@ -130,6 +137,7 @@ import useCredito from '../hooks/useCredito';
 import Select from '@/components/Select.vue';
 import Loading from '@/components/Loading.vue';
 import Table from '@/components/Table.vue';
+import { onFocus } from '@/lib/onFocus';
 
 const {
     openPanel,
@@ -137,7 +145,9 @@ const {
     getClientes,
     isLoading,
     comboClientes,
-    generateCuotas
+    generateCuotas,
+    onSubmit,
+    getCronogramaPDF
 } = useCredito();
 
 const calcularTEA = () => {
@@ -172,4 +182,8 @@ const keyTasaEAandEM = () => {
 }
 
 getClientes()
+
+setTimeout(() => {
+    onFocus('clientes_id', true)
+}, 300);
 </script>

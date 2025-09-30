@@ -2,8 +2,12 @@ import { format } from "date-fns";
 import { defineStore } from "pinia";
 import { baseApi } from "../../../../../services/baseApi";
 import { toast } from "vue-sonner";
-import Decimal from "decimal.js-light";
-import { generarCuotas, getDividendo } from "../utils/utilCreditos";
+import { generarCuotas } from "../utils/utilCreditos";
+import useSystem from "../../../hooks/useSystem";
+
+const {
+    activeEmpresa
+} = useSystem()
 
 export const credito = defineStore("credito", {
     state: () => ({
@@ -14,6 +18,7 @@ export const credito = defineStore("credito", {
             total: 0,
             cant_reg: 10,
             buscar: "",
+            estado: "pendiente"
         },
         openPanel: true,
         new_credito: {
@@ -37,6 +42,26 @@ export const credito = defineStore("credito", {
         comboClientes: []
     }),
     actions: {
+        resetForm() {
+            this.new_credito = {
+                aporte: 0,
+                ahorro: 0,
+                clientes_id: null,
+                comision: 0,
+                cuota_definida: 0,
+                cuotas: [],
+                fecha_primer_pago: format(new Date(), 'yyyy-MM-dd'),
+                importe: 1,
+                isInteresVariable: true,
+                modo_pago: "mensual",
+                moneda: 'PEN',
+                nro_cuotas: 0,
+                tea: 0,
+                ted: 0,
+                tem: 0,
+                tipo_cambio: 3.8
+            }
+        },
         async getClientes() {
             this.isLoading = true;
             try {
@@ -62,7 +87,7 @@ export const credito = defineStore("credito", {
                 const isSabado = primeraFecha.getDay() === 6;
 
                 if (isFeriado.resp || isDomingo || isSabado) {
-                    toast.error('La fecha del primer pago no debe ser sabado, domingo o feriado');
+                    toast.warning('La fecha del primer pago no debe ser sabado, domingo o feriado');
                     this.isLoading = false;
                     return;
                 }
@@ -153,6 +178,60 @@ export const credito = defineStore("credito", {
                     resp: false,
                     data: []
                 }
+            }
+        },
+        async getCreditos() {
+            this.isLoading = true;
+            try {
+                const { data } = await baseApi.get("creditos", {
+                    params: this.pag
+                });
+                this.creditos = data.data;
+                this.pag.total = data.total;
+            } catch (e) {
+                toast.error(e.response.data.message)
+            } finally {
+                this.isLoading = false;
+            }
+        },
+        async onSubmit() {
+            this.isLoading = true;
+            try {
+                const { data } = await baseApi.post("creditos", this.new_credito)
+                toast.success(data.message);
+                this.new_credito.id = data.creditos_id;
+                await this.getCronogramaPDF(data.creditos_id);
+            } catch (e) {
+                toast.error(e.response.data.message)
+            } finally {
+                this.isLoading = false;
+            }
+        },
+        async onDelete(id) {
+            this.isLoading = true;
+            try {
+                const { data } = await baseApi.delete(`creditos/${id}`);
+                toast.success(data.message);
+                await this.getCreditos();
+            } catch (e) {
+                toast.error(e.response.data.message)
+            } finally {
+                this.isLoading = false;
+            }
+        },
+        async getCronogramaPDF(id) {
+            this.isLoading = true;
+            try {
+                const { data } = await baseApi.get("cronograma", {
+                    params: { creditos_id: id }
+                })
+                const { default: printCronograma01 } = await import('../pdf/printCronograma01')
+                await printCronograma01(activeEmpresa.value, data.credito, data.cliente, data.cronograma);
+            } catch (e) {
+                console.log(e)
+                toast.error(e)
+            } finally {
+                this.isLoading = false;
             }
         }
     }

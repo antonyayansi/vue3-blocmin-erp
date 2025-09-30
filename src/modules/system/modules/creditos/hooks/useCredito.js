@@ -7,7 +7,12 @@ const useCredito = () => {
     return {
         ...creditoStore,
         getClientes: credito().getClientes,
-        generateCuotas: credito().generateCuotas
+        generateCuotas: credito().generateCuotas,
+        onSubmit: credito().onSubmit,
+        getCreditos: credito().getCreditos,
+        onDelete: credito().onDelete,
+        resetForm: credito().resetForm,
+        getCronogramaPDF: credito().getCronogramaPDF
     }
 }
 

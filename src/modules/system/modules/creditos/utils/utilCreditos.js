@@ -10,6 +10,7 @@ export const generarCuotas = (fechaInicio, modoPago, importePrestamo, nroCuotas,
 
     // Clona la fecha inicial para no modificar el objeto original
     let fechaBase = new Date(fechaInicio);
+    let fechaDiaria = new Date(fechaInicio);
     const dividendo = getDividendo(nroCuotas);
     const importeNum = new Decimal(importePrestamo);
     let saldoCapital = new Decimal(importeNum);
@@ -18,32 +19,46 @@ export const generarCuotas = (fechaInicio, modoPago, importePrestamo, nroCuotas,
 
 
     for (let i = 0; i < nroCuotas; i++) {
-        // Calcula la fecha base para el pago de la cuota
-        if (i !== 0) {
-            if (modoPago === 'mensual') {
-                // Siempre intenta el mismo día del mes que la fecha inicial
-                fechaBase = addMonths(fechaBase, 1);
-            } else if (modoPago === 'diario') {
-                fechaBase = addDays(fechaBase, 1);
-            } else if (modoPago === 'quincenal') {
-                fechaBase = addDays(fechaBase, 15);
-            } else if (modoPago === 'semanal') {
-                fechaBase = addDays(fechaBase, 7);
+        let fecha;
+        if (modoPago === 'diario') {
+            // Para diario, avanzar siempre al siguiente día hábil
+            if (i !== 0) {
+                fechaDiaria = addDays(fechaDiaria, 1);
             }
-        }
-        // Ajusta solo si la fecha base cae en feriado/sábado/domingo
-        let fecha = new Date(fechaBase);
-        let intentos = 0;
-        while (
-            (feriados && feriados.includes(format(fecha, 'dd/MM')))
-            || fecha.getDay() === 0
-            || fecha.getDay() === 6
-        ) {
-            fecha = addDays(fecha, 1);
-            intentos++;
-            // Si el nuevo día también es feriado, sábado o domingo, sigue sumando
-            // Si se sale del mes, rompe el ciclo (evita bucle infinito)
-            if (intentos > 31) break;
+            let intentos = 0;
+            while (
+                (feriados && feriados.includes(format(fechaDiaria, 'dd/MM')))
+                || fechaDiaria.getDay() === 0
+                || fechaDiaria.getDay() === 6
+            ) {
+                fechaDiaria = addDays(fechaDiaria, 1);
+                intentos++;
+                if (intentos > 31) break;
+            }
+            fecha = new Date(fechaDiaria);
+        } else {
+            // Para mensual, quincenal, semanal
+            if (i !== 0) {
+                if (modoPago === 'mensual') {
+                    fechaBase = addMonths(fechaBase, 1);
+                } else if (modoPago === 'quincenal') {
+                    fechaBase = addDays(fechaBase, 15);
+                } else if (modoPago === 'semanal') {
+                    fechaBase = addDays(fechaBase, 7);
+                }
+            }
+            let fechaTemp = new Date(fechaBase);
+            let intentos = 0;
+            while (
+                (feriados && feriados.includes(format(fechaTemp, 'dd/MM')))
+                || fechaTemp.getDay() === 0
+                || fechaTemp.getDay() === 6
+            ) {
+                fechaTemp = addDays(fechaTemp, 1);
+                intentos++;
+                if (intentos > 31) break;
+            }
+            fecha = new Date(fechaTemp);
         }
 
         // Comision por periodo

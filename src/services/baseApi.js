@@ -37,3 +37,4 @@ export const baseApi = axios.create({
 });
 
 export const version = import.meta.env.VITE_APP_VERSION || "1.0.0";
+export const baseURLImagen = import.meta.env.VITE_IMAGEN_URL || "";

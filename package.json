@@ -17,6 +17,8 @@
     "date-fns": "^4.1.0",
     "decimal.js-light": "^2.5.1",
     "jose": "^6.1.0",
+    "jspdf": "^3.0.3",
+    "jspdf-autotable": "^5.0.2",
     "pinia": "^3.0.3",
     "primeicons": "^7.0.0",
     "primevue": "^4.3.9",
