@@ -7,6 +7,7 @@ import { MotionPlugin } from "@vueuse/motion";
 import PrimeVue from "primevue/config";
 import VueAwesomePaginate from "vue-awesome-paginate";
 import ConfirmationService from "primevue/confirmationservice";
+import Tooltip from 'primevue/tooltip';
 import { Kalel } from "./theme/Kalel";
 
 import "./style.css";
@@ -20,6 +21,7 @@ createApp(App)
   .use(MotionPlugin)
   .use(VueAwesomePaginate)
   .use(ConfirmationService)
+  .directive('tooltip', Tooltip)
   .use(PrimeVue, {
     theme: {
       preset: Kalel,

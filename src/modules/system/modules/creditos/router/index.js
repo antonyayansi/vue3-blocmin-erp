@@ -13,10 +13,10 @@ export default {
             path: 'create',
             component: () => import('../views/Create.vue')
         },
-        // {
-        //     name: 'autorizaciones.index',
-        //     path: '/autorizaciones',
-        //     component: () => import('../../autorizaciones/views/Index.vue')
-        // }
+        {
+            name: 'autorizaciones.index',
+            path: '/autorizaciones',
+            component: () => import('../views/AutorizarDesembolso.vue')
+        }
     ]
 }

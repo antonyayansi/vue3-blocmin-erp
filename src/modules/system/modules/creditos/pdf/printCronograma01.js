@@ -87,7 +87,7 @@ const printCronograma01 = async (empresa, credito, cliente, cronograma) => {
             ]
         }),
         ...options,
-        margin: { top: 74, right: 10, left: 10, bottom: 10 },
+        margin: { top: 74, right: 10, left: 10, bottom: 30 },
         didParseCell: function (data) {
             if (data.row.index === 0 && data.cell.section === 'head') {
                 data.cell.styles.fillColor = '#000000';
