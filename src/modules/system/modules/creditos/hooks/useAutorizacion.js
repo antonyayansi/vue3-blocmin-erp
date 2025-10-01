@@ -7,7 +7,8 @@ const useAutorizacion = () => {
     return {
         ...autorizacionStore,
         getCreditos: autorizacion().getCreditos,
-        onAutorizacion: autorizacion().onAutorizacion
+        onAutorizacion: autorizacion().onAutorizacion,
+        onPrintDjAndPagare: autorizacion().onPrintDjAndPagare
     }
 }
 

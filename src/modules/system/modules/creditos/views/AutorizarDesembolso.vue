@@ -69,7 +69,7 @@
                             <div v-else class="flex space-x-2 justify-end">
                                 <Button @click="getCronogramaPDF(credito.id)" icon="pi pi-print" variant="outlined"
                                     severity="info" size="small" />
-                                <Button v-tooltip.top="'Imprimir DJ y Pagaré'" @click="getCronogramaPDF(credito.id)"
+                                <Button v-tooltip.top="'Imprimir DJ y Pagaré'" @click="onPrintDjAndPagare(credito.id)"
                                     icon="pi pi-file-check" variant="outlined" severity="success" size="small" />
                                 <Button @click="openAutorizacion(credito, 'Rechazo')" icon="pi pi-trash"
                                     variant="outlined" severity="danger" size="small" />
@@ -143,7 +143,8 @@ const {
     openModal,
     new_autorizacion,
     tipo_credito,
-    onAutorizacion
+    onAutorizacion,
+    onPrintDjAndPagare
 } = useAutorizacion()
 
 const openAutorizacion = (credito, tipo = 'Aprobacion') => {

@@ -1,6 +1,11 @@
 import { defineStore } from "pinia";
 import { toast } from "vue-sonner";
 import { baseApi } from "../../../../../services/baseApi";
+import useSystem from "../../../hooks/useSystem";
+
+const {
+    activeEmpresa
+} = useSystem()
 
 export const autorizacion = defineStore("autorizacion", {
     state: () => ({
@@ -55,10 +60,32 @@ export const autorizacion = defineStore("autorizacion", {
                     : "anulaciones", this.new_autorizacion);
                 toast.success(data.message);
                 await this.getCreditos();
+                if (this.new_autorizacion?.tipo == 'Aprobacion') {
+                    await this.onPrintDjAndPagare(this.new_autorizacion.id, true);
+                }
                 this.openModal = false;
                 this.new_autorizacion = null;
             } catch (e) {
                 toast.error(e.response.data.message);
+            } finally {
+                this.isLoading = false;
+            }
+        },
+        async onPrintDjAndPagare(creditos_id, isnew) {
+            this.isLoading = true;
+            try {
+                const { data } = await baseApi.get("pagare", {
+                    params: {
+                        creditos_id,
+                        isnew
+                    }
+                })
+                const { default: printDJ } = await import('../pdf/printDJ');
+                const { default: printPagare } = await import('../pdf/printPagare');
+                await printDJ(activeEmpresa.value, data.credito, data.cliente);
+                await printPagare(activeEmpresa.value, data.credito, data.cliente);
+            } catch (e) {
+
             } finally {
                 this.isLoading = false;
             }
