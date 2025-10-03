@@ -22,6 +22,11 @@ export default {
             name: 'creditos.cobros',
             path: '/cobros',
             component: () => import('../views/Cobros.vue')
+        },
+        {
+            name: 'creditos.reporte',
+            path: '/credireportes',
+            component: () => import('../views/Reporte.vue')
         }
     ]
 }
