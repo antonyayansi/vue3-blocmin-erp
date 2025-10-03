@@ -1,21 +1,7 @@
 <template>
     <Panel header="Reportes generales" v-motion :initial="{ opacity: 0, y: -30 }" :enter="{ opacity: 1, y: 0 }"
         :leave="{ opacity: 0, y: -30 }" :transition="{ duration: 0.3 }">
-        <div class="grid grid-cols-4 gap-2">
-            <div class="col-span-4 md:col-span-2 lg:col-span-1">
-                <Button @click="getLibroIngreso(true)" label="Libro de ingresos" icon="pi pi-file" class="w-full" />
-            </div>
-            <!-- <div class="col-span-4 md:col-span-2 lg:col-span-1">
-                <Button label="Reporte de cobros" icon="pi pi-file" class="w-full" />
-            </div>
-            <div class="col-span-4 md:col-span-2 lg:col-span-1">
-                <Button label="Reporte de clientes con crédito" icon="pi pi-file" class="w-full" />
-            </div>
-            <div class="col-span-4 md:col-span-2 lg:col-span-1">
-                <Button label="Reporte de créditos vencidos" icon="pi pi-file" class="w-full" />
-            </div> -->
-        </div>
-        <div class="mt-4">
+        <div class="">
             <div class="mb-2">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                     <!-- Input -->
@@ -25,6 +11,12 @@
                             <InputText v-model="buscar" size="small" @keyup="searchReporte()" placeholder="Buscar..."
                                 class="w-full md:w-auto" />
                         </IconField>
+                    </div>
+
+                    <!-- Botón -->
+                    <div class="w-full flex justify-end md:w-auto">
+                        <Button @click="getLibroIngreso(true)" label="Exportar" icon="pi pi-file-excel"
+                            severity="success" size="small" class="" />
                     </div>
                 </div>
             </div>
@@ -93,6 +85,8 @@ import Table from '@/components/Table.vue';
 import { format } from 'date-fns';
 import { formatMoneda } from '../../../../../lib/formatMoneda';
 import Loading from '../../../../../components/Loading.vue';
+import GraficoEstadoCreditos from '../components/GraficoEstadoCreditos.vue';
+import GraficoDesembolsosMes from '../components/GraficoDesembolsosMes.vue';
 
 const {
     isLoading,

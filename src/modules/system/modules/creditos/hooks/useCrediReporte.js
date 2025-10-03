@@ -7,6 +7,7 @@ export const useCrediReporte = () => {
     return {
         ...storeCreditoReporte,
         getLibroIngreso: credireporte().getLibroIngreso,
-        searchReporte: credireporte().searchReporte
+        searchReporte: credireporte().searchReporte,
+        getEstadosCredito: credireporte().getEstadosCredito
     }
 }

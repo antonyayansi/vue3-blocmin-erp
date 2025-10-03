@@ -7,6 +7,7 @@ export const credireporte = defineStore("credireporte", {
     state: () => ({
         libroingresos: [],
         libroingresos_filtrado: [],
+        estados_credito: [],
         isLoading: false,
         //para filtrar
         buscar: ''
@@ -44,6 +45,17 @@ export const credireporte = defineStore("credireporte", {
                 // Buscar en DNI o nombre
                 return dni.includes(searchTerm) || nombre.includes(searchTerm);
             });
+        },
+        async getEstadosCredito() {
+            this.isLoading = true;
+            try {
+                const { data } = await baseApi.get("reporteCreditos")
+                this.estados_credito = data
+            } catch (e) {
+                toast.error(e.response.data.message)
+            } finally {
+                this.isLoading = false;
+            }
         }
     }
 })
