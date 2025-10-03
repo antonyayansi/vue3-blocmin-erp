@@ -17,6 +17,11 @@ export default {
             name: 'autorizaciones.index',
             path: '/autorizaciones',
             component: () => import('../views/AutorizarDesembolso.vue')
+        },
+        {
+            name: 'creditos.cobros',
+            path: '/cobros',
+            component: () => import('../views/Cobros.vue')
         }
     ]
 }
