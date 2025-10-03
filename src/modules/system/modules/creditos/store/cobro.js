@@ -2,6 +2,12 @@ import { defineStore } from "pinia";
 import { baseApi } from "../../../../../services/baseApi";
 import { toast } from "vue-sonner";
 import { differenceInCalendarDays, format, isBefore, parseISO } from "date-fns";
+import useSystem from "../../../hooks/useSystem";
+
+const {
+    activeEmpresa,
+    activeSede
+} = useSystem()
 
 export const cobro = defineStore("cobro", {
     state: () => ({
@@ -51,7 +57,7 @@ export const cobro = defineStore("cobro", {
                         creditos_id: creditoId
                     }
                 });
-                return data.map(cuota => {
+                const cuotas = data.map(cuota => {
 
                     let observacion = '';
                     // cuota.fecha_vencimiento : yyyy-MM-dd
@@ -60,10 +66,18 @@ export const cobro = defineStore("cobro", {
 
                     if (isBefore(fechaVencimiento, hoy)) {
                         const diasVencidos = differenceInCalendarDays(hoy, fechaVencimiento);
-                        observacion = `Vencido hace ${diasVencidos} días`;
+                        if (cuota.estado === 'pagado') {
+                            observacion = `Pagado con ${diasVencidos} días de retraso`;
+                        } else {
+                            observacion = diasVencidos == 0 ? 'Vence hoy' : `Vencido hace ${diasVencidos} días`;
+                        }
                     } else {
                         const diasRestantes = differenceInCalendarDays(fechaVencimiento, hoy);
-                        observacion = `Faltan ${diasRestantes} días para el vencimiento`;
+                        if (cuota.estado === 'pagado') {
+                            observacion = `Pagado a tiempo`;
+                        } else {
+                            observacion = `Faltan ${diasRestantes} días para el vencimiento`;
+                        }
                     }
                     return {
                         ...cuota,
@@ -72,6 +86,12 @@ export const cobro = defineStore("cobro", {
                         observacion
                     }
                 })
+
+                let credito = this.creditos.find(c => c.id === creditoId);
+                if (credito) {
+                    credito.cuotas = cuotas;
+                }
+
             } catch (e) {
                 console.log(e);
                 toast.error(e.response.data.message);
@@ -84,9 +104,32 @@ export const cobro = defineStore("cobro", {
             try {
                 const { data } = await baseApi.post('pagarcuotas', this.new_pago);
                 toast.success(data.message)
-                await this.getCreditosByCliente();
+                if (data.isCompleted) {
+                    await this.getCreditosByCliente();
+                    await this.getCuotasByCredito(this.new_pago.creditos_id);
+                } else {
+                    await this.getCuotasByCredito(this.new_pago.creditos_id);
+                }
                 this.openModalPagar = false;
             } catch (e) {
+                toast.error(e.response.data.message);
+            } finally {
+                this.isLoading = false;
+            }
+        },
+        async onPrintCobro(cuotaId, nro_recibo) {
+            this.isLoading = true;
+            try {
+                const { data } = await baseApi.get("imprimir", {
+                    params: {
+                        id: cuotaId,
+                        nro_recibo
+                    }
+                })
+                const { default: printRecibo } = await import('../pdf/printRecibo')
+                await printRecibo(activeEmpresa.value, activeSede.value, data)
+            } catch (e) {
+                console.log(e);
                 toast.error(e.response.data.message);
             } finally {
                 this.isLoading = false;

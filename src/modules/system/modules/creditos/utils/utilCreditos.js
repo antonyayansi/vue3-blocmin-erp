@@ -1,7 +1,7 @@
 import { addDays, addMonths, format } from "date-fns";
 import Decimal from "decimal.js-light";
 
-export const generarCuotas = (fechaInicio, modoPago, importePrestamo, nroCuotas, TEM, pagoMensualTotal, comision, feriados) => {
+export const generarCuotas = (fechaInicio, modoPago, importePrestamo, nroCuotas, TEM, pagoMensualTotal, comision, feriados, ahorro = 0) => {
 
     //feriados: [{'dd/MM', 'dd/MM', ...}]
 
@@ -66,6 +66,10 @@ export const generarCuotas = (fechaInicio, modoPago, importePrestamo, nroCuotas,
         if (comision) {
             comision_periodo = new Decimal(comision ?? 0);
         }
+        let ahorro_periodo = new Decimal(0);
+        if (ahorro) {
+            ahorro_periodo = new Decimal(ahorro ?? 0);
+        }
 
         //para generar la cuota_gastos
         let cuota_gastos = 0;
@@ -126,7 +130,7 @@ export const generarCuotas = (fechaInicio, modoPago, importePrestamo, nroCuotas,
             cuota_interes: interes.toFixed(2),
             cuota_comision: comision_periodo.toFixed(2),
             cuota_gastos: cuota_gastos.toFixed(2),
-            cuota_total: pagoMensualTotalDec.plus(comision_periodo).toFixed(2),
+            cuota_total: pagoMensualTotalDec.plus(comision_periodo).plus(ahorro_periodo).toFixed(2)
         };
         cuotas.push(cuota);
         // Si el saldo de capital es cero, termina el ciclo

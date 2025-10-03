@@ -4,7 +4,7 @@
         <h1 class="font-bold">S/. {{ credito?.importe }}</h1>
         <div :class="colorMap[credito?.estado] || 'text-gray-500'" class="flex items-center space-x-2 mt-2">
             <span class="font-medium text-sm">{{ credito?.estado == 'pagado' ? 'Pagado' : 'En proceso de pago'
-                }}</span>
+            }}</span>
             <i v-if="credito?.estado != 'pagado'" class="pi pi-clock" />
             <i v-else class="pi pi-check-circle" />
         </div>
@@ -32,11 +32,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="cuota in cuotas" :key="cuota"
+                        <tr v-for="cuota in credito.cuotas" :key="cuota"
                             class="cursor-default text-sm border-b border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800">
                             <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300 text-center">
-                                <CheckBox v-if="cuota.estado !== 'pagado'" v-model="cuota.checked" binary
-                                    size="small" />
+                                <CheckBox v-if="cuota.estado !== 'pagado'" v-model="cuota.checked" binary size="small"
+                                    :disabled="!canSelectCuota(cuota)" @change="onCuotaChange(cuota)" />
                                 {{ cuota.numero_cuota }}
                             </td>
                             <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300">{{
@@ -53,13 +53,14 @@
                                     cuota?.estado == 'pagado' ? 'Pagado' : 'Pendiente' }}</td>
                             <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300">{{
                                 cuota.fecha_pago ? format(new Date(`${cuota.fecha_pago} 00:00:00`), 'dd/MM/yyyy') : ''
-                            }}
+                                }}
                             </td>
                             <td v-if="cuota.estado == 'pagado'" class="px-2 py-1 text-zinc-700 dark:text-zinc-300">
                                 <div class="flex space-x-2 justify-end">
-                                    <Button v-tooltip.top="'Imprimir recibo'" @click="getCronogramaPDF(credito.id)"
-                                        icon="pi pi-print" variant="outlined" severity="info" size="small" />
-                                    <Button @click="confirmDelete(credito)" icon="pi pi-trash" variant="outlined"
+                                    <Button v-tooltip.top="'Imprimir recibo'"
+                                        @click="onPrintCobro(cuota.id, cuota.nro_recibo)" icon="pi pi-print"
+                                        variant="outlined" severity="info" size="small" />
+                                    <Button @click="confirmEliminar(cuota)" icon="pi pi-trash" variant="outlined"
                                         severity="danger" size="small" />
                                 </div>
                             </td>
@@ -72,31 +73,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import Button from 'primevue/button'
 import useCobro from '../hooks/useCobro'
 import CheckBox from 'primevue/checkbox'
-import Dialog from 'primevue/dialog'
 import Table from '../../../../../components/Table.vue'
 import { formatMoneda } from '../../../../../lib/formatMoneda'
 import { format } from 'date-fns'
 import { toast } from 'vue-sonner'
 import Decimal from 'decimal.js-light'
+import { useConfirm } from 'primevue'
 
 const openCuotas = ref(false)
-const cuotas = ref([])
-
-const {
-    getCuotasByCredito,
-    openModalPagar,
-    new_pago
-} = useCobro()
-
-const colorMap = {
-    'aprobado': 'dark:text-yellow-500 text-yellow-600',
-    'pagado': 'text-green-500',
-    'pendiente': 'dark:text-yellow-500 text-yellow-600',
-}
+const confirm = useConfirm()
 
 const props = defineProps({
     credito: {
@@ -105,18 +94,52 @@ const props = defineProps({
     },
 })
 
+const {
+    getCuotasByCredito,
+    openModalPagar,
+    new_pago,
+    onDelete,
+    onPrintCobro
+} = useCobro()
+
+const confirmEliminar = (credito) => {
+    confirm.require({
+        message: `¿Está seguro de eliminar la cuota ${credito.numero_cuota}?`,
+        header: 'Confirmación',
+        icon: 'pi pi-info-circle',
+        rejectLabel: 'Cancelar',
+        rejectProps: {
+            label: 'Cancelar',
+            severity: 'secondary',
+            outlined: true
+        },
+        acceptProps: {
+            label: 'Eliminar',
+            severity: 'danger'
+        },
+        accept: async () => {
+            await onDelete(credito)
+        }
+    });
+};
+
+const colorMap = {
+    'aprobado': 'dark:text-yellow-500 text-yellow-600',
+    'pagado': 'text-green-500',
+    'pendiente': 'dark:text-yellow-500 text-yellow-600',
+}
+
 const getCuotas = async () => {
     if (openCuotas.value) {
         openCuotas.value = false;
         return;
     }
-    cuotas.value = await getCuotasByCredito(props.credito.id);
+    await getCuotasByCredito(props.credito.id);
     openCuotas.value = true;
 }
 
 const onOpenPagar = () => {
-
-    const cuotasSeleccionadas = cuotas.value.filter(c => c.checked);
+    const cuotasSeleccionadas = (props.credito.cuotas ?? []).filter(c => c.checked);
     if (cuotasSeleccionadas.length === 0) {
         toast.error('Seleccione al menos una cuota para pagar.');
         return;
@@ -128,5 +151,43 @@ const onOpenPagar = () => {
     new_pago.value.ahorros = new Decimal(props.credito.ahorro).toNumber();
     new_pago.value.total = cuotasSeleccionadas.reduce((acc, cuota) => acc + new Decimal(cuota.cuota).toNumber(), 0);
     new_pago.value.gastos = cuotasSeleccionadas.reduce((acc, cuota) => acc + new Decimal(cuota.gastos).toNumber(), 0);
+    new_pago.value.observacion = '';
+    new_pago.value.monto_adicional = 0;
+}
+
+// Función para determinar si una cuota puede ser seleccionada
+const canSelectCuota = (cuota) => {
+    // Si la cuota ya está pagada, no se puede seleccionar
+    if (cuota.estado === 'pagado') return false;
+
+    // Si es la primera cuota no pagada, siempre se puede seleccionar
+    const cuotasNoPagadas = (props.credito.cuotas ?? []).filter(c => c.estado !== 'pagado');
+    const primeraNoPageada = cuotasNoPagadas[0];
+
+    if (cuota.numero_cuota === primeraNoPageada?.numero_cuota) return true;
+
+    // Para las demás cuotas, verificar que todas las anteriores estén seleccionadas
+    const cuotasAnteriores = (props.credito.cuotas ?? []).filter(c =>
+        c.estado !== 'pagado' &&
+        c.numero_cuota < cuota.numero_cuota
+    );
+
+    // Todas las cuotas anteriores no pagadas deben estar seleccionadas
+    return cuotasAnteriores.every(c => c.checked);
+}
+
+// Función para manejar el cambio de estado de una cuota
+const onCuotaChange = (cuota) => {
+    // Si se desmarca una cuota, desmarcar todas las posteriores
+    if (!cuota.checked) {
+        const cuotasPosteriores = (props.credito.cuotas ?? []).filter(c =>
+            c.estado !== 'pagado' &&
+            c.numero_cuota > cuota.numero_cuota
+        );
+
+        cuotasPosteriores.forEach(c => {
+            c.checked = false;
+        });
+    }
 }
 </script>

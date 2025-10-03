@@ -98,6 +98,9 @@ export const system = defineStore("system", {
       this.isLoading = true;
       try {
         const { data } = await baseApi.get("/menu_users");
+        if (!data.length) {
+          return
+        }
         this.menus = data;
         let jwtMenu = await firmarJWT({
           menus: JSON.parse(JSON.stringify(this.menus)),

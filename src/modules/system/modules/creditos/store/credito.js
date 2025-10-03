@@ -100,8 +100,8 @@ export const credito = defineStore("credito", {
                     this.new_credito.tem,
                     this.new_credito.cuota_definida,
                     this.new_credito.comision,
-                    isFeriado.data
-
+                    isFeriado.data,
+                    this.new_credito.ahorro
                 )
             } catch (e) {
                 toast.error(e)
