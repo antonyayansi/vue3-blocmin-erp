@@ -30,6 +30,11 @@ export default {
             name: 'miempresa',
             path: '/miempresa',
             component: () => import('../modules/empresa/views/MiEmpresa.vue')
+        },
+        {
+            name: 'users',
+            path: '/users',
+            component: () => import('../modules/usuarios/views/Usuarios.vue')
         }
     ]
 }
