@@ -23,6 +23,11 @@ const routes = [
         name: 'login',
         component: () => import('../modules/auth/views/Login.vue'),
         beforeEnter: [isRedirect]
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'not-found',
+        component: () => import('../components/404.vue')
     }
 ]
 

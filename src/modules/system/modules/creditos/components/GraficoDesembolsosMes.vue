@@ -37,6 +37,9 @@ import {
 } from 'chart.js'
 import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
+import { useDark } from '@vueuse/core'
+
+const isDark = useDark()
 
 // Registrar componentes de Chart.js
 Chart.register(
@@ -139,7 +142,7 @@ const chartData = computed(() => {
     }
 })
 
-const chartOptions = {
+const chartOptions = computed(() => ({
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
@@ -152,10 +155,15 @@ const chartOptions = {
             labels: {
                 padding: 20,
                 usePointStyle: true,
-                color: '#374151'
+                color: isDark.value ? '#d1d5db' : '#374151'
             }
         },
         tooltip: {
+            backgroundColor: isDark.value ? '#374151' : '#ffffff',
+            titleColor: isDark.value ? '#f9fafb' : '#111827',
+            bodyColor: isDark.value ? '#d1d5db' : '#374151',
+            borderColor: isDark.value ? '#6b7280' : '#e5e7eb',
+            borderWidth: 1,
             callbacks: {
                 label: function (context) {
                     const label = context.dataset.label || '';
@@ -174,10 +182,13 @@ const chartOptions = {
             title: {
                 display: true,
                 text: 'Periodo',
-                color: '#374151'
+                color: isDark.value ? '#d1d5db' : '#374151'
             },
             grid: {
-                color: 'rgba(0, 0, 0, 0.1)'
+                color: isDark.value ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+            },
+            ticks: {
+                color: isDark.value ? '#d1d5db' : '#374151'
             }
         },
         y: {
@@ -190,7 +201,10 @@ const chartOptions = {
                 color: '#3b82f6'
             },
             grid: {
-                color: 'rgba(0, 0, 0, 0.1)'
+                color: isDark.value ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+            },
+            ticks: {
+                color: isDark.value ? '#d1d5db' : '#374151'
             }
         },
         y1: {
@@ -205,9 +219,12 @@ const chartOptions = {
             grid: {
                 drawOnChartArea: false,
             },
+            ticks: {
+                color: isDark.value ? '#d1d5db' : '#374151'
+            }
         }
     }
-}
+}))
 
 const createChart = () => {
     if (chartInstance) {
@@ -218,7 +235,7 @@ const createChart = () => {
         chartInstance = new Chart(chartCanvas.value, {
             type: 'line',
             data: chartData.value,
-            options: chartOptions
+            options: chartOptions.value
         })
     }
 }
@@ -226,6 +243,7 @@ const createChart = () => {
 const updateChart = () => {
     if (chartInstance) {
         chartInstance.data = chartData.value
+        chartInstance.options = chartOptions.value
         chartInstance.update()
     } else {
         createChart()
@@ -239,6 +257,10 @@ onMounted(() => {
 watch(() => props.libroingresos, () => {
     updateChart()
 }, { deep: true })
+
+watch(isDark, () => {
+    updateChart()
+})
 
 onBeforeUnmount(() => {
     if (chartInstance) {

@@ -1,5 +1,5 @@
 <template>
-    <Panel header="Reportes generales" v-motion :initial="{ opacity: 0, y: -30 }" :enter="{ opacity: 1, y: 0 }"
+    <Panel header="Libro de Ingresos" v-motion :initial="{ opacity: 0, y: -30 }" :enter="{ opacity: 1, y: 0 }"
         :leave="{ opacity: 0, y: -30 }" :transition="{ duration: 0.3 }">
         <div class="">
             <div class="mb-2">

@@ -26,6 +26,9 @@ import {
     Tooltip,
     Legend
 } from 'chart.js'
+import { useDark } from '@vueuse/core'
+
+const isDark = useDark()
 
 // Registrar componentes de Chart.js
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend)
@@ -74,7 +77,7 @@ const chartData = computed(() => {
     }
 })
 
-const chartOptions = {
+const chartOptions = computed(() => ({
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -83,10 +86,15 @@ const chartOptions = {
             labels: {
                 padding: 20,
                 usePointStyle: true,
-                color: '#374151'
+                color: isDark.value ? '#d1d5db' : '#374151'
             }
         },
         tooltip: {
+            backgroundColor: isDark.value ? '#374151' : '#ffffff',
+            titleColor: isDark.value ? '#f9fafb' : '#111827',
+            bodyColor: isDark.value ? '#d1d5db' : '#374151',
+            borderColor: isDark.value ? '#6b7280' : '#e5e7eb',
+            borderWidth: 1,
             callbacks: {
                 label: function (context) {
                     const label = context.label || '';
@@ -99,7 +107,7 @@ const chartOptions = {
         }
     },
     cutout: '60%'
-}
+}))
 
 const createChart = () => {
     if (chartInstance) {
@@ -110,7 +118,7 @@ const createChart = () => {
         chartInstance = new Chart(chartCanvas.value, {
             type: 'doughnut',
             data: chartData.value,
-            options: chartOptions
+            options: chartOptions.value
         })
     }
 }
@@ -118,6 +126,7 @@ const createChart = () => {
 const updateChart = () => {
     if (chartInstance) {
         chartInstance.data = chartData.value
+        chartInstance.options = chartOptions.value
         chartInstance.update()
     }
 }
@@ -129,6 +138,10 @@ onMounted(() => {
 watch(() => props.estados_total, () => {
     updateChart()
 }, { deep: true })
+
+watch(isDark, () => {
+    updateChart()
+})
 
 onBeforeUnmount(() => {
     if (chartInstance) {

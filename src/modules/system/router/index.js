@@ -25,6 +25,11 @@ export default {
             name: 'creditos',
             path: '/creditos',
             ...routerCreditos
+        },
+        {
+            name: 'miempresa',
+            path: '/miempresa',
+            component: () => import('../modules/empresa/views/MiEmpresa.vue')
         }
     ]
 }
