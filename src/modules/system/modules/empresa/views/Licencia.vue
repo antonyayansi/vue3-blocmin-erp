@@ -7,7 +7,7 @@
             <p class="text-sm font-light text-zinc-500">{{ status.expires_at }}</p>
             <p :class="status.estado == 'Activo' ? 'text-green-500' : 'text-rose-500'" class="   ">{{ status.estado }}
             </p>
-            <button v-if="status.estado != 'Activo'" class="mt-2 bg-skin-primary p-2 text-white rounded-md">
+            <button v-if="status.estado != 'Activo'" class="mt-2 bg-primary-500 p-2 text-white rounded-md">
                 Renovar
             </button>
         </div>

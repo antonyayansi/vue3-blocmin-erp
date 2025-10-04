@@ -13,7 +13,7 @@
                 </div>
                 <div class="my-2 flex flex-wrap">
                     <select v-model="new_user.rol" required
-                        class="w-full outline-none p-2 bg-white border-zinc-200 dark:bg-zinc-950 dark:border-zinc-700 dark:text-zinc-200 rounded-md focus:ring-2 focus:ring-skin-primary border  ">
+                        class="w-full outline-none p-2 bg-white border-zinc-200 dark:bg-zinc-950 dark:border-zinc-700 dark:text-zinc-200 rounded-md focus:ring-2 focus:ring-primary-500 border  ">
                         <option value="admin">Administrador</option>
                         <option value="user">Usuario</option>
                     </select>
@@ -37,7 +37,7 @@
                 </div>
                 <div class="my-2 flex flex-wrap">
                     <select v-model="new_user.rol" required
-                        class="w-full outline-none p-2 bg-white border-zinc-200 dark:bg-zinc-950 dark:border-zinc-700 dark:text-zinc-200 rounded-md focus:ring-2 focus:ring-skin-primary border  ">
+                        class="w-full outline-none p-2 bg-white border-zinc-200 dark:bg-zinc-950 dark:border-zinc-700 dark:text-zinc-200 rounded-md focus:ring-2 focus:ring-primary-500 border  ">
                         <option value="admin">Administrador</option>
                         <option value="user">Usuario</option>
                     </select>
