@@ -25,7 +25,9 @@ export const cobro = defineStore("cobro", {
             observacion: '',
             tipo_pago: 'efectivo',
             total: 0,
-            cuotas: []
+            cuotas: [],
+            dias_vencidos: 0,
+            monto_x_dias: 0
         }
     }),
     actions: {

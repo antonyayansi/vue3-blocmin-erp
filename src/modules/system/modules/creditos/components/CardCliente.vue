@@ -43,13 +43,20 @@
     </div>
     <Dialog v-model:visible="openModalPagar" modal :header="'Pagar cuotas'" :style="{ width: '700px' }"
         :breakpoints="{ '960px': '90vw', '640px': '100vw' }">
-        <div class="mb-4 font-mono text-sm bg-primary-500/20 rounded-xl p-4 text-primary-700 dark:text-primary-300">
-            <p>Se van a pagar <strong>{{ new_pago.cuotas.length }}</strong> cuota(s), total de <strong>S/. {{
-                formatMoneda(totalPagar) }}</strong></p>
+        <div class="mb-4 font-mono text-sm bg-cyan-500/20 rounded-xl p-4 text-cyan-700 dark:text-cyan-300">
+            <h1 class="text-xl font-bold">S/. {{ formatMoneda(totalPagar) }}</h1>
+            ------------------
+            <p>Se van a pagar <strong>{{ new_pago.cuotas.length }}</strong> cuota(s)</p>
             <p>Gastos: <strong>{{ formatMoneda(new_pago.gastos) }}</strong></p>
             <p>Ahorros: <strong>{{ new_pago.ahorros ? formatMoneda(new_pago.ahorros) : '' }}</strong></p>
+            ------------------
             <p>Monto adicional: <strong>{{ new_pago.monto_adicional ? formatMoneda(new_pago.monto_adicional) : ''
-                    }}</strong></p>
+            }}</strong>
+            </p>
+            <p class="text-red-600 font-bold" v-if="new_pago.dias_vencidos > 0">({{ new_pago.dias_vencidos }} días
+                vencidos, S/. {{
+                    formatMoneda(new_pago.monto_x_dias)
+                }} por días)</p>
         </div>
         <div class="grid grid-cols-4 gap-2">
             <div class="col-span-2 md:col-span-1 flex flex-col space-y-1">

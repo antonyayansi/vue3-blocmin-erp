@@ -99,7 +99,8 @@ const {
     openModalPagar,
     new_pago,
     onDelete,
-    onPrintCobro
+    onPrintCobro,
+    creditos
 } = useCobro()
 
 const confirmEliminar = (credito) => {
@@ -138,6 +139,27 @@ const getCuotas = async () => {
     openCuotas.value = true;
 }
 
+const calcularPenalidad = (cuotas) => {
+    const credito = creditos.value.find(c => c.id === new_pago.value.creditos_id);
+
+    let totalPenalidad = new Decimal(0);
+    const dias_vencidos = cuotas.reduce((acc, cuota) => acc + cuota.dias_vencidos, 0);
+    let monto_x_dias = 0;
+    if (credito.modo_pago == 'semanal') {
+        monto_x_dias = 0.5,
+            totalPenalidad = new Decimal(0.5 || 0).mul(dias_vencidos);
+    } else if (credito.modo_pago == 'diario') {
+        monto_x_dias = 0.2;
+        totalPenalidad = new Decimal(0.2 || 0).mul(dias_vencidos);
+    }
+
+    return {
+        penalidad: totalPenalidad.toNumber(),
+        dias_vencidos: dias_vencidos,
+        monto_x_dias: monto_x_dias
+    }
+}
+
 const onOpenPagar = () => {
     const cuotasSeleccionadas = (props.credito.cuotas ?? []).filter(c => c.checked);
     if (cuotasSeleccionadas.length === 0) {
@@ -145,14 +167,27 @@ const onOpenPagar = () => {
         return;
     }
 
+    // Función helper para obtener valor numérico seguro
+    const getSafeNumber = (value) => {
+        if (value === null || value === undefined || value === '') return 0;
+        const num = parseFloat(value);
+        return isNaN(num) ? 0 : num;
+    };
+
     openModalPagar.value = true;
     new_pago.value.creditos_id = props.credito.id;
     new_pago.value.cuotas = cuotasSeleccionadas;
-    new_pago.value.ahorros = new Decimal(props.credito.ahorro).toNumber();
-    new_pago.value.total = cuotasSeleccionadas.reduce((acc, cuota) => acc + new Decimal(cuota.cuota).toNumber(), 0);
-    new_pago.value.gastos = cuotasSeleccionadas.reduce((acc, cuota) => acc + new Decimal(cuota.gastos).toNumber(), 0);
+    new_pago.value.ahorros = getSafeNumber(props.credito.ahorro);
+    new_pago.value.total = cuotasSeleccionadas.reduce((acc, cuota) => {
+        return acc + getSafeNumber(cuota.cuota);
+    }, 0);
+    new_pago.value.gastos = cuotasSeleccionadas.reduce((acc, cuota) => {
+        return acc + getSafeNumber(cuota.gastos);
+    }, 0);
     new_pago.value.observacion = '';
-    new_pago.value.monto_adicional = 0;
+    new_pago.value.monto_adicional = calcularPenalidad(cuotasSeleccionadas).penalidad;
+    new_pago.value.dias_vencidos = calcularPenalidad(cuotasSeleccionadas).dias_vencidos;
+    new_pago.value.monto_x_dias = calcularPenalidad(cuotasSeleccionadas).monto_x_dias;
 }
 
 // Función para determinar si una cuota puede ser seleccionada
