@@ -27,6 +27,11 @@ export default {
             name: 'creditos.reporte',
             path: '/credireportes',
             component: () => import('../views/Reporte.vue')
+        },
+        {
+            name: 'creditos.movimientos',
+            path: '/movimientos-credito',
+            component: () => import('../views/MovimientoCredito.vue')
         }
     ]
 }

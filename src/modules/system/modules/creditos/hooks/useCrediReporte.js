@@ -8,6 +8,7 @@ export const useCrediReporte = () => {
         ...storeCreditoReporte,
         getLibroIngreso: credireporte().getLibroIngreso,
         searchReporte: credireporte().searchReporte,
-        getEstadosCredito: credireporte().getEstadosCredito
+        getEstadosCredito: credireporte().getEstadosCredito,
+        getMovimientosCredito: credireporte().getMovimientosCredito
     }
 }
