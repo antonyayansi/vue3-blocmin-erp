@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { baseURLImagen } from '../../../../../services/baseApi'
 import Decimal from "decimal.js-light";
 import { loadImage } from "../../../../../lib/loadImage";
+import { formatMoneda } from "../../../../../lib/formatMoneda";
 
 const reportRecibo = async (empresa, sede, data) => {
 
@@ -128,7 +129,9 @@ const reportRecibo = async (empresa, sede, data) => {
         capital += new Decimal(detalle[i]?.capital).toNumber();
     }
 
-    interes = new Decimal(interes).minus(gastos).toNumber();
+    if (gastos < interes) {
+        interes = new Decimal(interes).minus(gastos).toNumber();
+    }
 
     // Sección de montos con estilo bancario
     doc.setFontSize(10);
@@ -143,26 +146,26 @@ const reportRecibo = async (empresa, sede, data) => {
     // Capital
     doc.text('Capital pagado', 7, y);
     doc.text('S/', 55, y);
-    doc.text(capital.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'), 72, y, 'right');
+    doc.text(formatMoneda(capital), 72, y, 'right');
     y += 4;
 
     // Saldo restante
     doc.text('Saldo restante', 7, y);
     doc.text('S/', 55, y);
     const saldoRestante = (saldo_primero - capital) > 0 ? (saldo_primero - capital) : 0;
-    doc.text(saldoRestante.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'), 72, y, 'right');
+    doc.text(formatMoneda(saldoRestante), 72, y, 'right');
     y += 4;
 
     // Interés
     doc.text('Interes compensat.', 7, y);
     doc.text('S/', 55, y);
-    doc.text(interes.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'), 72, y, 'right');
+    doc.text(formatMoneda(interes), 72, y, 'right');
     y += 4;
 
     // Gastos
     doc.text('Gastos administ.', 7, y);
     doc.text('S/', 55, y);
-    doc.text(gastos.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'), 72, y, 'right');
+    doc.text(formatMoneda(gastos), 72, y, 'right');
     y += 4;
 
     // Monto adicional (penalidad o descuento)
@@ -170,7 +173,7 @@ const reportRecibo = async (empresa, sede, data) => {
     const esPenalidad = montoAdicional >= 0;
     doc.text(esPenalidad ? 'Penalidad mora' : 'Descuento', 7, y);
     doc.text('S/', 55, y);
-    doc.text(Math.abs(montoAdicional).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'), 72, y, 'right');
+    doc.text(formatMoneda(montoAdicional), 72, y, 'right');
     y += 6;
 
     // Total destacado
@@ -179,7 +182,7 @@ const reportRecibo = async (empresa, sede, data) => {
     doc.text('TOTAL PAGADO', 7, y);
     doc.text('S/', 55, y);
     let total = new Decimal(recibo.monto).add(recibo.monto_adicional).toNumber();
-    doc.text(total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'), 72, y, 'right');
+    doc.text(formatMoneda(total), 72, y, 'right');
 
     y += 6;
     doc.setFont('Courier', 'normal');

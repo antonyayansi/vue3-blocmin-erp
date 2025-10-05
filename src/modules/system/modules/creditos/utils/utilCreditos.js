@@ -116,10 +116,24 @@ export const generarCuotas = (fechaInicio, modoPago, importePrestamo, nroCuotas,
         const pagoMensualTotalDec = new Decimal(pagoMensualTotal);
         const interes = saldoCapital.mul(tasaEfectivaMensual);
         let capital = pagoMensualTotalDec.minus(interes);
-        if (capital.greaterThan(saldoCapital)) {
+
+        // Si es la última cuota o si el capital calculado es mayor al saldo restante,
+        // ajustar el capital para liquidar completamente el saldo
+        if (i === nroCuotas - 1 || capital.greaterThan(saldoCapital)) {
             capital = saldoCapital;
         }
+
         saldoCapital = saldoCapital.minus(capital);
+
+        // Calcular el total de la cuota
+        let cuotaTotal;
+        if (i === nroCuotas - 1) {
+            // Para la última cuota, el total es capital + interés + comisión + gastos + ahorro
+            cuotaTotal = capital.plus(interes).plus(comision_periodo).plus(cuota_gastos).plus(ahorro_periodo);
+        } else {
+            // Para las demás cuotas, usar el pago mensual estándar
+            cuotaTotal = pagoMensualTotalDec.plus(comision_periodo).plus(ahorro_periodo);
+        }
 
         const cuota = {
             cuota_nro: cuotas.length + 1,
@@ -130,7 +144,7 @@ export const generarCuotas = (fechaInicio, modoPago, importePrestamo, nroCuotas,
             cuota_interes: interes.toFixed(2),
             cuota_comision: comision_periodo.toFixed(2),
             cuota_gastos: cuota_gastos.toFixed(2),
-            cuota_total: pagoMensualTotalDec.plus(comision_periodo).plus(ahorro_periodo).toFixed(2)
+            cuota_total: cuotaTotal.toFixed(2)
         };
         cuotas.push(cuota);
         // Si el saldo de capital es cero, termina el ciclo

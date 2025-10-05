@@ -21,7 +21,17 @@ export const credireporte = defineStore("credireporte", {
             fecha_inicio: format(new Date(), 'yyyy-MM-dd'),
             fecha_fin: format(new Date(), 'yyyy-MM-dd'),
         },
-        movimientos: []
+        movimientos: [],
+        //seguimiento credito
+        pag_seguimiento: {
+            estado: 'pendiente',
+            buscar: '',
+            total: 0,
+            page: 1,
+            cant_reg: 10,
+            modo_pago: 'diario'
+        },
+        seguimientos: []
     }),
     actions: {
         async getLibroIngreso(exportar = false) {
@@ -92,6 +102,36 @@ export const credireporte = defineStore("credireporte", {
 
                 })
                 this.pag.total = data.total;
+            } catch (e) {
+                toast.error(e.response.data.message)
+            } finally {
+                this.isLoading = false;
+            }
+        },
+        async getSeguimientoCredito() {
+            this.isLoading = true;
+            try {
+                const { data } = await baseApi.get("seguimiento_credito", {
+                    params: this.pag_seguimiento
+                })
+                this.seguimientos = data.data
+                this.pag_seguimiento.total = data.total;
+            } catch (e) {
+                toast.error(e.response.data.message)
+            } finally {
+                this.isLoading = false;
+            }
+        },
+        async exportSeguimientoCredito() {
+            this.isLoading = true;
+            try {
+                const { data } = await baseApi.get("seguimiento_credito", {
+                    params: {
+                        ...this.pag_seguimiento,
+                        cant_reg: 99999
+                    },
+                })
+                await exportToExcel(data.data, `seguimiento_credito_${new Date().getTime()}`)
             } catch (e) {
                 toast.error(e.response.data.message)
             } finally {

@@ -85,8 +85,6 @@ import Table from '@/components/Table.vue';
 import { format } from 'date-fns';
 import { formatMoneda } from '../../../../../lib/formatMoneda';
 import Loading from '../../../../../components/Loading.vue';
-import GraficoEstadoCreditos from '../components/GraficoEstadoCreditos.vue';
-import GraficoDesembolsosMes from '../components/GraficoDesembolsosMes.vue';
 
 const {
     isLoading,

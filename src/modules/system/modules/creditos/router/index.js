@@ -32,6 +32,11 @@ export default {
             name: 'creditos.movimientos',
             path: '/movimientos-credito',
             component: () => import('../views/MovimientoCredito.vue')
+        },
+        {
+            name: 'creditos.seguimiento',
+            path: '/crediseguimiento',
+            component: () => import('../views/Seguimiento.vue')
         }
     ]
 }
