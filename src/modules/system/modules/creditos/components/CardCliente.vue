@@ -2,10 +2,42 @@
     <div
         class="border border-zinc-200 dark:border-zinc-700 rounded-lg p-4 bg-gradient-to-br from-white to-zinc-50 dark:from-zinc-800 dark:to-zinc-900 shadow-md hover:shadow-lg transition-shadow duration-200">
         <!-- Header -->
-        <div class="mb-3">
+        <div class="mb-3 flex items-center justify-between">
             <h2 class="text-lg font-semibold text-zinc-800 dark:text-zinc-100 truncate">
                 {{ cliente.nombre }}
             </h2>
+            <!-- Score Badge -->
+            <div v-if="score.score" class="flex items-center space-x-2">
+                <div class="flex flex-col items-end">
+                    <span class="text-xs text-zinc-500 dark:text-zinc-400">Score de crédito</span>
+                    <div class="flex items-center space-x-1">
+                        <span class="text-xs font-medium mr-1" :class="{
+                            'text-blue-600': score.score >= 750,
+                            'text-green-600': score.score >= 600 && score.score < 750,
+                            'text-yellow-600': score.score >= 450 && score.score < 600,
+                            'text-red-600': score.score < 450
+                        }">
+                            {{ score.score >= 750 ? 'Excelente' :
+                                score.score >= 600 ? 'Bueno' :
+                                    score.score >= 450 ? 'Regular' : 'Malo' }}
+                        </span>
+                        <span class="text-sm font-bold" :class="{
+                            'text-blue-600': score.score >= 750,
+                            'text-green-600': score.score >= 600 && score.score < 750,
+                            'text-yellow-600': score.score >= 450 && score.score < 600,
+                            'text-red-600': score.score < 450
+                        }">
+                            {{ score.score }}
+                        </span>
+                        <i class="pi pi-circle-fill text-xs" :class="{
+                            'text-blue-600': score.score >= 750,
+                            'text-green-600': score.score >= 600 && score.score < 750,
+                            'text-yellow-600': score.score >= 450 && score.score < 600,
+                            'text-red-600': score.score < 450
+                        }"></i>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Información en grid -->
@@ -114,6 +146,7 @@ const {
     openModalPagar,
     onPagarCuotas,
     new_pago,
+    score
 } = useCobro()
 
 const props = defineProps({

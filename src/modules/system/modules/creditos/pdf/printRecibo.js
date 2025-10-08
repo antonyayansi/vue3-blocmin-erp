@@ -152,7 +152,9 @@ const reportRecibo = async (empresa, sede, data) => {
     // Saldo restante
     doc.text('Saldo restante', 7, y);
     doc.text('S/', 55, y);
-    const saldoRestante = (saldo_primero - capital) > 0 ? (saldo_primero - capital) : 0;
+    let saldoRestante = (saldo_primero - capital) > 0 ? (saldo_primero - capital) : 0;
+    if (saldoRestante < 0) saldoRestante = 0;
+    if (credito.nro_cuotas - detalle[detalle.length - 1]?.numero_cuota === 0) saldoRestante = 0;
     doc.text(formatMoneda(saldoRestante), 72, y, 'right');
     y += 4;
 

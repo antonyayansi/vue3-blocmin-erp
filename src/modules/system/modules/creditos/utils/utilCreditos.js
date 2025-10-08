@@ -125,15 +125,8 @@ export const generarCuotas = (fechaInicio, modoPago, importePrestamo, nroCuotas,
 
         saldoCapital = saldoCapital.minus(capital);
 
-        // Calcular el total de la cuota
-        let cuotaTotal;
-        if (i === nroCuotas - 1) {
-            // Para la última cuota, el total es capital + interés + comisión + gastos + ahorro
-            cuotaTotal = capital.plus(interes).plus(comision_periodo).plus(cuota_gastos).plus(ahorro_periodo);
-        } else {
-            // Para las demás cuotas, usar el pago mensual estándar
-            cuotaTotal = pagoMensualTotalDec.plus(comision_periodo).plus(ahorro_periodo);
-        }
+        // Calcular el total de la cuota (siempre igual para todas las cuotas)
+        const cuotaTotal = pagoMensualTotalDec.plus(comision_periodo).plus(cuota_gastos).plus(ahorro_periodo);
 
         const cuota = {
             cuota_nro: cuotas.length + 1,

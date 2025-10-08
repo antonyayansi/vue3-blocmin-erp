@@ -15,6 +15,36 @@
                 <label class="text-xs font-medium text-gray-700 dark:text-gray-300">Cliente</label>
                 <Select v-model="new_credito.clientes_id" :options="comboClientes" mode="offline" id="clientes_id"
                     @selected="onFocus('importe')" placeholder="Seleccione un cliente" />
+                <div v-if="new_credito.score" class="flex items-center space-x-2">
+                    <div class="flex flex-col items-end">
+                        <div class="flex items-center space-x-1">
+                            <span class="text-xs font-medium mr-1" :class="{
+                                'text-blue-600': new_credito.score.score >= 750,
+                                'text-green-600': new_credito.score.score >= 600 && new_credito.score.score < 750,
+                                'text-yellow-600': new_credito.score.score >= 450 && new_credito.score.score < 600,
+                                'text-red-600': new_credito.score.score < 450
+                            }">
+                                {{ new_credito.score.score >= 750 ? 'Excelente' :
+                                    new_credito.score.score >= 600 ? 'Bueno' :
+                                        new_credito.score.score >= 450 ? 'Regular' : 'Malo' }}
+                            </span>
+                            <span class="text-sm font-bold" :class="{
+                                'text-blue-600': new_credito.score.score >= 750,
+                                'text-green-600': new_credito.score.score >= 600 && new_credito.score.score < 750,
+                                'text-yellow-600': new_credito.score.score >= 450 && new_credito.score.score < 600,
+                                'text-red-600': new_credito.score.score < 450
+                            }">
+                                {{ new_credito.score.score }}
+                            </span>
+                            <i class="pi pi-circle-fill text-xs" :class="{
+                                'text-blue-600': new_credito.score.score >= 750,
+                                'text-green-600': new_credito.score.score >= 600 && new_credito.score.score < 750,
+                                'text-yellow-600': new_credito.score.score >= 450 && new_credito.score.score < 600,
+                                'text-red-600': new_credito.score.score < 450
+                            }"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-span-2 md:col-span-1 flex flex-col space-y-1">
                 <label
@@ -138,6 +168,7 @@ import Select from '@/components/Select.vue';
 import Loading from '@/components/Loading.vue';
 import Table from '@/components/Table.vue';
 import { onFocus } from '@/lib/onFocus';
+import { watch } from 'vue';
 
 const {
     openPanel,
@@ -147,7 +178,8 @@ const {
     comboClientes,
     generateCuotas,
     onSubmit,
-    getCronogramaPDF
+    getCronogramaPDF,
+    getScoreByDni
 } = useCredito();
 
 const calcularTEA = () => {
@@ -182,6 +214,16 @@ const keyTasaEAandEM = () => {
 }
 
 getClientes()
+
+watch(
+    () => new_credito.value.clientes_id,
+    async (newVal) => {
+        const cliente = comboClientes.value.find(c => c.codigo === newVal);
+        if (cliente && cliente.documento) {
+            await getScoreByDni(cliente.documento);
+        }
+    }
+)
 
 setTimeout(() => {
     onFocus('clientes_id', true)

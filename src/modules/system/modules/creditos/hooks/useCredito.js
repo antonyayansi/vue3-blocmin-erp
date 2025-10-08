@@ -12,7 +12,8 @@ const useCredito = () => {
         getCreditos: credito().getCreditos,
         onDelete: credito().onDelete,
         resetForm: credito().resetForm,
-        getCronogramaPDF: credito().getCronogramaPDF
+        getCronogramaPDF: credito().getCronogramaPDF,
+        getScoreByDni: credito().getScoreByDni
     }
 }
 

@@ -14,6 +14,7 @@ export const cobro = defineStore("cobro", {
         isLoading: false,
         cliente: null,
         creditos: [],
+        score: null,
         openModalPagar: false,
         buscar: '',
         new_pago: {
@@ -45,6 +46,10 @@ export const cobro = defineStore("cobro", {
                 }
                 this.cliente = data.cliente;
                 this.creditos = data.creditos;
+                this.score = data.score.length ? {
+                    score: parseInt(data.score[0]?.score_credito_general),
+                    color: data.score[0]?.score_color_general,
+                } : null;
             } catch (e) {
                 toast.error(e.response.data.message);
             } finally {
@@ -65,16 +70,20 @@ export const cobro = defineStore("cobro", {
                     // cuota.fecha_vencimiento : yyyy-MM-dd
                     const hoy = new Date();
                     const fechaVencimiento = parseISO(cuota.fecha_vencimiento);
+                    const fechaPago = cuota.fecha_pago ? parseISO(cuota.fecha_pago) : null;
 
-                    if (isBefore(fechaVencimiento, hoy)) {
-                        const diasVencidos = differenceInCalendarDays(hoy, fechaVencimiento);
+                    // Para cuotas pagadas, usar fecha_pago; para pendientes, usar fecha actual
+                    const fechaReferencia = cuota.estado === 'pagado' && fechaPago ? fechaPago : hoy;
+
+                    if (isBefore(fechaVencimiento, fechaReferencia)) {
+                        const diasVencidos = differenceInCalendarDays(fechaReferencia, fechaVencimiento);
                         if (cuota.estado === 'pagado') {
                             observacion = `Pagado con ${diasVencidos} días de retraso`;
                         } else {
                             observacion = diasVencidos == 0 ? 'Vence hoy' : `Vencido hace ${diasVencidos} días`;
                         }
                     } else {
-                        const diasRestantes = differenceInCalendarDays(fechaVencimiento, hoy);
+                        const diasRestantes = differenceInCalendarDays(fechaVencimiento, fechaReferencia);
                         if (cuota.estado === 'pagado') {
                             observacion = `Pagado a tiempo`;
                         } else {
@@ -84,7 +93,7 @@ export const cobro = defineStore("cobro", {
                     return {
                         ...cuota,
                         isSelected: false,
-                        dias_vencidos: isBefore(fechaVencimiento, hoy) ? differenceInCalendarDays(hoy, fechaVencimiento) : 0,
+                        dias_vencidos: isBefore(fechaVencimiento, fechaReferencia) ? differenceInCalendarDays(fechaReferencia, fechaVencimiento) : 0,
                         observacion
                     }
                 })

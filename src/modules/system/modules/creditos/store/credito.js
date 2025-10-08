@@ -37,7 +37,8 @@ export const credito = defineStore("credito", {
             tea: 0,
             ted: 0,
             tem: 0,
-            tipo_cambio: 3.8
+            tipo_cambio: 3.8,
+            score: null
         },
         comboClientes: []
     }),
@@ -59,7 +60,8 @@ export const credito = defineStore("credito", {
                 tea: 0,
                 ted: 0,
                 tem: 0,
-                tipo_cambio: 3.8
+                tipo_cambio: 3.8,
+                score: null
             }
         },
         async getClientes() {
@@ -67,6 +69,24 @@ export const credito = defineStore("credito", {
             try {
                 const { data } = await baseApi.get("clientes_combo");
                 this.comboClientes = data;
+            } catch (e) {
+                toast.error(e.response.data.message)
+            } finally {
+                this.isLoading = false;
+            }
+        },
+        async getScoreByDni(dni) {
+            this.isLoading = true;
+            try {
+                const { data } = await baseApi.get("getscorebydni", {
+                    params: {
+                        documento: dni
+                    }
+                })
+                this.new_credito.score = data.score.length ? {
+                    score: parseInt(data.score[0]?.score_credito_general),
+                    color: data.score[0]?.score_color_general,
+                } : null;
             } catch (e) {
                 toast.error(e.response.data.message)
             } finally {
