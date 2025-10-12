@@ -11,10 +11,10 @@ export const generarCuotas = (fechaInicio, modoPago, importePrestamo, nroCuotas,
     // Clona la fecha inicial para no modificar el objeto original
     let fechaBase = new Date(fechaInicio);
     let fechaDiaria = new Date(fechaInicio);
-    const dividendo = getDividendo(nroCuotas);
     const importeNum = new Decimal(importePrestamo);
     let saldoCapital = new Decimal(importeNum);
-    const tasaEfectivaMensual = new Decimal(Math.pow(1 + (TEM / 100), 1 / dividendo) - 1);
+    // TEM ya viene como tasa efectiva mensual en porcentaje
+    const tasaEfectivaMensual = new Decimal(TEM / 100);
     const cuotas = [];
 
 

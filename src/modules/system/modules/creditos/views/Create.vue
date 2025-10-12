@@ -201,13 +201,40 @@ const keyTasaEAandEM = () => {
         return
     }
     //calcular tem solo con nro de cuotas y cuota definida
-    let cuota_definida = new_credito.value.cuota_definida;
-    let nro_cuotas = new_credito.value.nro_cuotas;
-    let importe = new_credito.value.importe;
+    let cuota_definida = parseFloat(new_credito.value.cuota_definida);
+    let nro_cuotas = parseInt(new_credito.value.nro_cuotas);
+    let importe = parseFloat(new_credito.value.importe);
 
     if (cuota_definida > 0 && nro_cuotas > 0 && importe > 0) {
-        let tem = (((cuota_definida * nro_cuotas) / importe) - 1) * 100;
-        new_credito.value.tem = tem.toFixed(4);
+        // Calcular TEM usando método de Newton-Raphson para encontrar la tasa
+        // Fórmula: P = C * [(1 - (1 + i)^-n) / i]
+        // Donde P = importe, C = cuota, n = nro_cuotas, i = TEM
+
+        let tem = 0.01; // Valor inicial 1%
+        let precision = 0.000001;
+        let maxIteraciones = 100;
+
+        for (let iter = 0; iter < maxIteraciones; iter++) {
+            if (tem <= 0) tem = 0.001; // Evitar división por cero
+
+            // f(i) = C * [(1 - (1 + i)^-n) / i] - P
+            let factor = Math.pow(1 + tem, -nro_cuotas);
+            let f = cuota_definida * ((1 - factor) / tem) - importe;
+
+            // f'(i) derivada
+            let df = cuota_definida * ((factor * nro_cuotas * tem - 1 + factor) / (tem * tem));
+
+            let temNuevo = tem - f / df;
+
+            if (Math.abs(temNuevo - tem) < precision) {
+                tem = temNuevo;
+                break;
+            }
+
+            tem = temNuevo;
+        }
+
+        new_credito.value.tem = (tem * 100).toFixed(4);
         calcularTEA();
     }
 

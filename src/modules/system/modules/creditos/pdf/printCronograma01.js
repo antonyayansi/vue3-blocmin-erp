@@ -70,6 +70,12 @@ const printCronograma01 = async (empresa, credito, cliente, cronograma) => {
         theme: 'plain'
     }
 
+    // Calcular totales
+    const totalCapital = cronograma.reduce((sum, item) => new Decimal(sum).add(new Decimal(item.capital)).toNumber(), 0);
+    const totalInteres = cronograma.reduce((sum, item) => new Decimal(sum).add(new Decimal(item.interes)).toNumber(), 0);
+    const totalComision = cronograma.reduce((sum, item) => new Decimal(sum).add(new Decimal(item.comision)).toNumber(), 0);
+    const totalCuota = cronograma.reduce((sum, item) => new Decimal(sum).add(new Decimal(item.cuota)).toNumber(), 0);
+
     options.startY = 80;
     autoTable(doc, {
         head: [headers],
@@ -82,16 +88,27 @@ const printCronograma01 = async (empresa, credito, cliente, cronograma) => {
                 item.saldo,
                 item.capital,
                 item.interes,
-                item.comision,
+                item.ahorros,
                 item.cuota
             ]
         }),
+        foot: [[
+            { content: 'TOTAL', colSpan: 4, styles: { halign: 'right', fontStyle: 'bold' } },
+            { content: formatMoneda(totalCapital), styles: { halign: 'right', fontStyle: 'bold' } },
+            { content: formatMoneda(totalInteres), styles: { halign: 'right', fontStyle: 'bold' } },
+            { content: formatMoneda(totalComision), styles: { halign: 'right', fontStyle: 'bold' } },
+            { content: formatMoneda(totalCuota), styles: { halign: 'right', fontStyle: 'bold' } }
+        ]],
         ...options,
         margin: { top: 74, right: 10, left: 10, bottom: 30 },
         didParseCell: function (data) {
             if (data.row.index === 0 && data.cell.section === 'head') {
                 data.cell.styles.fillColor = '#000000';
                 data.cell.styles.textColor = '#fff'
+            }
+            if (data.cell.section === 'foot') {
+                data.cell.styles.fillColor = '#f0f0f0';
+                data.cell.styles.textColor = '#000000';
             }
         },
 
@@ -101,15 +118,16 @@ const printCronograma01 = async (empresa, credito, cliente, cronograma) => {
     let y = doc.lastAutoTable.finalY + 5
 
     let aporte = new Decimal(credito.aporte).toNumber()
-    let importe_total = new Decimal(credito.importe).add(new Decimal(credito.interes)).add(new Decimal(credito.aporte)).toNumber()
-    let total_comision = new Decimal(credito.comision).times(new Decimal(credito.nro_cuotas)).toNumber()
+    let importe_total = new Decimal(credito.importe ?? 0).add(new Decimal(credito.interes)).add(new Decimal(credito.aporte)).toNumber()
+    let total_comision = new Decimal(credito.comision ?? 0).times(new Decimal(credito.nro_cuotas)).toNumber()
+    let total_ahorros = new Decimal(credito.ahorros ?? 0).times(new Decimal(credito.nro_cuotas)).toNumber()
 
     doc.setFontSize(10)
     doc.text(`Total de intereses: ${formatMoneda(credito.interes)}`, 10, y + 5)
     doc.text(`Total de capital: ${formatMoneda(credito.importe)}`, 10, y + 10)
     doc.text(`Aporte: ${formatMoneda(aporte)}`, 10, y + 15)
     doc.text(`Importe a pagar: ${formatMoneda(importe_total)}`, 10, y + 20)
-    doc.text(`Total de ahorros ${formatMoneda(total_comision)}`, 10, y + 25)
+    doc.text(`Total de ahorros ${formatMoneda(total_ahorros)}`, 10, y + 25)
 
     var pageCount = doc.internal.getNumberOfPages();
 
