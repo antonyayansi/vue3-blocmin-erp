@@ -4,7 +4,7 @@
         <h1 class="font-bold">S/. {{ credito?.importe }}</h1>
         <div :class="colorMap[credito?.estado] || 'text-gray-500'" class="flex items-center space-x-2 mt-2">
             <span class="font-medium text-sm">{{ credito?.estado == 'pagado' ? 'Pagado' : 'En proceso de pago'
-                }}</span>
+            }}</span>
             <i v-if="credito?.estado != 'pagado'" class="pi pi-clock" />
             <i v-else class="pi pi-check-circle" />
         </div>
@@ -55,7 +55,7 @@
                                     cuota?.estado == 'pagado' ? 'Pagado' : 'Pendiente' }}</td>
                             <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300">{{
                                 cuota.fecha_pago ? format(new Date(`${cuota.fecha_pago} 00:00:00`), 'dd/MM/yyyy') : ''
-                            }}
+                                }}
                             </td>
                             <td v-if="cuota.estado == 'pagado'" class="px-2 py-1 text-zinc-700 dark:text-zinc-300">
                                 <div class="flex space-x-2 justify-end">
@@ -72,7 +72,6 @@
             </Table>
         </div>
     </div>
-    <Loading :show="isLoading" title="Cargando cuotas..." />
 </template>
 
 <script setup>
@@ -87,7 +86,6 @@ import { toast } from 'vue-sonner'
 import Decimal from 'decimal.js-light'
 import { useConfirm } from 'primevue'
 import useCredito from '../hooks/useCredito'
-import Loading from '../../../../../components/Loading.vue'
 
 const openCuotas = ref(false)
 const confirm = useConfirm()
@@ -109,8 +107,7 @@ const {
 } = useCobro()
 
 const {
-    getCronogramaPDF,
-    isLoading
+    getCronogramaPDF
 } = useCredito()
 
 const confirmEliminar = (credito) => {
@@ -129,7 +126,7 @@ const confirmEliminar = (credito) => {
             severity: 'danger'
         },
         accept: async () => {
-            await onDelete(credito)
+            await onDelete(credito.id, credito.nro_recibo)
         }
     });
 };

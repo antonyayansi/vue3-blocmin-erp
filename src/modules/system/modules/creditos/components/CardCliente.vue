@@ -83,9 +83,10 @@
             <p>Ahorros: <strong>{{ new_pago.ahorros ? formatMoneda(new_pago.ahorros) : '' }}</strong></p>
             ------------------
             <p>Monto adicional: <strong>{{ new_pago.monto_adicional ? formatMoneda(new_pago.monto_adicional) : ''
-                    }}</strong>
+            }}</strong>
             </p>
-            <p class="text-red-600 font-bold" v-if="new_pago.dias_vencidos > 0">({{ new_pago.dias_vencidos }} días
+            <p class="text-red-600 dark:text-red-400 font-bold" v-if="new_pago.dias_vencidos > 0">({{
+                new_pago.dias_vencidos }} días
                 vencidos, S/. {{
                     formatMoneda(new_pago.monto_x_dias)
                 }} por días)</p>
@@ -98,7 +99,7 @@
                 <InputText v-model="new_pago.monto_adicional" size="small" />
             </div>
             <div class="col-span-2 md:col-span-1 flex flex-col space-y-1">
-                <label class="text-xs font-medium text-gray-700 dark:text-gray-300">Cliente</label>
+                <label class="text-xs font-medium text-gray-700 dark:text-gray-300">Metodo</label>
                 <Select v-model="new_pago.tipo_pago" :options="[
                     { codigo: 'efectivo', descripcion: 'Efectivo' },
                     { codigo: 'tarjeta', descripcion: 'Tarjeta' },
@@ -129,24 +130,28 @@
         </div>
         <Button label="Confirmar pago" icon="pi pi-check" class="mt-4" @click="onPagar()" severity="success" />
     </Dialog>
+    <ConfirmDialog />
 </template>
 
 <script setup>
 import { computed } from 'vue';
 import useCobro from '../hooks/useCobro';
 import Dialog from 'primevue/dialog'
+import ConfirmDialog from 'primevue/confirmdialog'
 import InputText from 'primevue/inputtext'
 import Textarea from 'primevue/textarea'
 import Button from 'primevue/button'
 import Select from '../../../../../components/Select.vue';
 import { formatMoneda } from '../../../../../lib/formatMoneda';
 import Decimal from 'decimal.js-light';
+import Loading from '../../../../../components/Loading.vue';
 
 const {
     openModalPagar,
     onPagarCuotas,
     new_pago,
-    score
+    score,
+    isLoading
 } = useCobro()
 
 const props = defineProps({

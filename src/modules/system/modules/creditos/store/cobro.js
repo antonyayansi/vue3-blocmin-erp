@@ -47,7 +47,8 @@ export const cobro = defineStore("cobro", {
                 this.cliente = data.cliente;
                 this.creditos = data.creditos;
                 this.score = data.score.length ? {
-                    score: parseInt(data.score[0]?.score_credito_general),
+                    score: parseInt(data.score[0]?.score_credito_general)
+                    ,
                     color: data.score[0]?.score_color_general,
                 } : null;
             } catch (e) {
@@ -139,6 +140,22 @@ export const cobro = defineStore("cobro", {
                 })
                 const { default: printRecibo } = await import('../pdf/printRecibo')
                 await printRecibo(activeEmpresa.value, activeSede.value, data)
+            } catch (e) {
+                console.log(e);
+                toast.error(e.response.data.message);
+            } finally {
+                this.isLoading = false;
+            }
+        },
+        async onDelete(cuotaId, nro_recibo) {
+            this.isLoading = true;
+            try {
+                const { data } = await baseApi.post(`rollbackcuota`, {
+                    cuotaId,
+                    nro_recibo
+                })
+                toast.success(data.message);
+                await this.getCuotasByCredito(this.new_pago.creditos_id);
             } catch (e) {
                 console.log(e);
                 toast.error(e.response.data.message);

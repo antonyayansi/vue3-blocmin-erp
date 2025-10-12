@@ -68,7 +68,10 @@ export const credito = defineStore("credito", {
             this.isLoading = true;
             try {
                 const { data } = await baseApi.get("clientes_combo");
-                this.comboClientes = data;
+                this.comboClientes = data.map(cliente => ({
+                    codigo: cliente.codigo,
+                    descripcion: `${cliente.descripcion} - ${cliente.documento}`,
+                }));
             } catch (e) {
                 toast.error(e.response.data.message)
             } finally {

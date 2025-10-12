@@ -18,7 +18,7 @@
         <CardCliente v-if="cliente" :cliente="cliente" />
         <CardCreditos v-if="creditos.length" v-for="credito in creditos" :key="credito.id" :credito="credito" />
     </Panel>
-    <Loading :show="isLoading" title="Cargando créditos..." />
+    <Loading :show="isLoading" />
 </template>
 
 <script setup>

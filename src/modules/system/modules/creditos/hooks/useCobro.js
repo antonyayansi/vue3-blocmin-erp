@@ -9,7 +9,8 @@ const useCobro = () => {
         getCreditosByCliente: cobro().getCreditosByCliente,
         getCuotasByCredito: cobro().getCuotasByCredito,
         onPagarCuotas: cobro().onPagarCuotas,
-        onPrintCobro: cobro().onPrintCobro
+        onPrintCobro: cobro().onPrintCobro,
+        onDelete: cobro().onDelete,
     }
 }
 
