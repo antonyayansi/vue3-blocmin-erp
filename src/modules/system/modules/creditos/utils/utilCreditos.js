@@ -137,6 +137,7 @@ export const generarCuotas = (fechaInicio, modoPago, importePrestamo, nroCuotas,
             cuota_interes: interes.toFixed(2),
             cuota_comision: comision_periodo.toFixed(2),
             cuota_gastos: cuota_gastos.toFixed(2),
+            cuota_ahorros: ahorro_periodo.toFixed(2),
             cuota_total: cuotaTotal.toFixed(2)
         };
         cuotas.push(cuota);

@@ -68,18 +68,23 @@
 
             <!-- Dirección Laboral -->
             <div v-if="cliente.direccion_laboral" class="flex items-center space-x-2 sm:col-span-2">
-                <i class="pi pi-building text-cyan-500 w-4"></i>
+                <i class="pi pi-building text-green-500 w-4"></i>
                 <span class="text-zinc-600 dark:text-zinc-300 truncate">{{ cliente.direccion_laboral }}</span>
             </div>
         </div>
     </div>
     <Dialog v-model:visible="openModalPagar" modal :header="'Pagar cuotas'" :style="{ width: '700px' }"
         :breakpoints="{ '960px': '90vw', '640px': '100vw' }">
-        <div class="mb-4 font-mono text-sm bg-cyan-500/20 rounded-xl p-4 text-cyan-700 dark:text-cyan-300">
+        <div class="mb-4 font-mono text-sm bg-green-500/20 rounded-xl p-4 text-green-700 dark:text-green-300">
             <h1 class="text-xl font-bold">S/. {{ formatMoneda(totalPagar) }}</h1>
             ------------------
             <p>Se van a pagar <strong>{{ new_pago.cuotas.length }}</strong> cuota(s)</p>
             <p>Gastos: <strong>{{ formatMoneda(new_pago.gastos) }}</strong></p>
+            <p>Interes: <strong :class="new_pago.menos_interes > 0 ? 'line-through' : ''">{{
+                formatMoneda(new_pago.interes) }}</strong><Button class="ml-2"
+                    :label="new_pago.menos_interes > 0 ? 'Mantenes interes' : 'Quitar interes'" size="small"
+                    variant="text" :severity="new_pago.menos_interes == 0 ? 'danger' : 'info'"
+                    @click="toggleInteres()" /></p>
             <p>Ahorros: <strong>{{ new_pago.ahorros ? formatMoneda(new_pago.ahorros) : '' }}</strong></p>
             ------------------
             <p>Monto adicional: <strong>{{ new_pago.monto_adicional ? formatMoneda(new_pago.monto_adicional) : ''
@@ -125,7 +130,7 @@
                 <label class="text-xs font-medium text-gray-700 dark:text-gray-300">
                     Observacion
                 </label>
-                <Textarea v-model="new_pago.observacion" fluid />
+                <InputText v-model="new_pago.observacion" fluid size="small" />
             </div>
         </div>
         <Button label="Confirmar pago" icon="pi pi-check" class="mt-4" @click="onPagar()" severity="success" />
@@ -139,12 +144,10 @@ import useCobro from '../hooks/useCobro';
 import Dialog from 'primevue/dialog'
 import ConfirmDialog from 'primevue/confirmdialog'
 import InputText from 'primevue/inputtext'
-import Textarea from 'primevue/textarea'
 import Button from 'primevue/button'
 import Select from '../../../../../components/Select.vue';
 import { formatMoneda } from '../../../../../lib/formatMoneda';
 import Decimal from 'decimal.js-light';
-import Loading from '../../../../../components/Loading.vue';
 
 const {
     openModalPagar,
@@ -174,8 +177,17 @@ const totalPagar = computed(() => {
     );
     const montoAdicional = safeNumber(new_pago.value.monto_adicional);
     total = total.plus(montoAdicional);
+    total = total.minus(new_pago.value.menos_interes || 0);
     return total.toNumber();
 })
+
+const toggleInteres = () => {
+    if (new_pago.value.menos_interes > 0) {
+        new_pago.value.menos_interes = 0
+    } else {
+        new_pago.value.menos_interes = new_pago.value.interes
+    }
+}
 
 const onPagar = async () => {
     onPagarCuotas()

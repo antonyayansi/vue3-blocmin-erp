@@ -183,6 +183,7 @@ const onOpenPagar = () => {
 
     openModalPagar.value = true;
     new_pago.value.creditos_id = props.credito.id;
+    new_pago.value.menos_interes = 0;
     new_pago.value.cuotas = cuotasSeleccionadas;
     new_pago.value.ahorros = getSafeNumber(props.credito.ahorro);
     new_pago.value.total = cuotasSeleccionadas.reduce((acc, cuota) => {
@@ -190,6 +191,9 @@ const onOpenPagar = () => {
     }, 0);
     new_pago.value.gastos = cuotasSeleccionadas.reduce((acc, cuota) => {
         return acc + getSafeNumber(cuota.gastos);
+    }, 0);
+    new_pago.value.interes = cuotasSeleccionadas.reduce((acc, cuota) => {
+        return acc + getSafeNumber(cuota.interes);
     }, 0);
     new_pago.value.observacion = '';
     new_pago.value.monto_adicional = calcularPenalidad(cuotasSeleccionadas).penalidad;

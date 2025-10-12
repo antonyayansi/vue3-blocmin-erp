@@ -183,7 +183,7 @@ const reportRecibo = async (empresa, sede, data) => {
     doc.setFontSize(9);
     doc.text('TOTAL PAGADO', 7, y);
     doc.text('S/', 55, y);
-    let total = new Decimal(recibo.monto).add(recibo.monto_adicional).toNumber();
+    let total = interes == 0 ? capital : new Decimal(recibo.monto).add(recibo.monto_adicional).toNumber();
     doc.text(formatMoneda(total), 72, y, 'right');
 
     y += 6;

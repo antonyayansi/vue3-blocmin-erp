@@ -21,6 +21,8 @@ export const cobro = defineStore("cobro", {
             creditos_id: null,
             fecha: format(new Date(), 'yyyy-MM-dd'),
             gastos: 0,
+            interes: 0,
+            menos_interes: 0,
             ahorros: 0,
             monto_adicional: 0,
             observacion: '',
@@ -105,7 +107,6 @@ export const cobro = defineStore("cobro", {
                 }
 
             } catch (e) {
-                console.log(e);
                 toast.error(e.response.data.message);
             } finally {
                 this.isLoading = false;
@@ -114,6 +115,17 @@ export const cobro = defineStore("cobro", {
         async onPagarCuotas() {
             this.isLoading = true;
             try {
+                this.new_pago.cuotas = this.new_pago.cuotas.map(c => {
+
+                    if (this.new_pago.menos_interes > 0) {
+                        c.interes = 0;
+                    }
+
+                    return {
+                        ...c
+                    }
+                })
+
                 const { data } = await baseApi.post('pagarcuotas', this.new_pago);
                 toast.success(data.message)
                 if (data.isCompleted) {
@@ -141,7 +153,6 @@ export const cobro = defineStore("cobro", {
                 const { default: printRecibo } = await import('../pdf/printRecibo')
                 await printRecibo(activeEmpresa.value, activeSede.value, data)
             } catch (e) {
-                console.log(e);
                 toast.error(e.response.data.message);
             } finally {
                 this.isLoading = false;
@@ -157,7 +168,6 @@ export const cobro = defineStore("cobro", {
                 toast.success(data.message);
                 await this.getCuotasByCredito(this.new_pago.creditos_id);
             } catch (e) {
-                console.log(e);
                 toast.error(e.response.data.message);
             } finally {
                 this.isLoading = false;
