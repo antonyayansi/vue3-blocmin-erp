@@ -4,14 +4,14 @@
         <h1 class="font-bold">S/. {{ credito?.importe }}</h1>
         <div :class="colorMap[credito?.estado] || 'text-gray-500'" class="flex items-center space-x-2 mt-2">
             <span class="font-medium text-sm">{{ credito?.estado == 'pagado' ? 'Pagado' : 'En proceso de pago'
-            }}</span>
+                }}</span>
             <i v-if="credito?.estado != 'pagado'" class="pi pi-clock" />
             <i v-else class="pi pi-check-circle" />
         </div>
         <div class="mt-2 flex justify-start">
             <Button @click="getCuotas" variant="text" :label="openCuotas ? 'Ocultar cuotas' : 'Ver cuotas'"
                 icon="pi pi-list" size="small" />
-            <Button @click="getCronogramaPDF(credito?.id)" variant="text" label="Cronograma" icon="pi pi-calendar"
+            <Button @click="getCronogramaPDF(credito?.id, true)" variant="text" label="Cronograma" icon="pi pi-calendar"
                 severity="info" size="small" />
         </div>
         <div v-if="openCuotas" class="mt-2">
@@ -55,7 +55,7 @@
                                     cuota?.estado == 'pagado' ? 'Pagado' : 'Pendiente' }}</td>
                             <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300">{{
                                 cuota.fecha_pago ? format(new Date(`${cuota.fecha_pago} 00:00:00`), 'dd/MM/yyyy') : ''
-                                }}
+                            }}
                             </td>
                             <td v-if="cuota.estado == 'pagado'" class="px-2 py-1 text-zinc-700 dark:text-zinc-300">
                                 <div class="flex space-x-2 justify-end">

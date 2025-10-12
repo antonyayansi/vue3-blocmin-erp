@@ -242,14 +242,19 @@ export const credito = defineStore("credito", {
                 this.isLoading = false;
             }
         },
-        async getCronogramaPDF(id) {
+        async getCronogramaPDF(id, estado = false) {
             this.isLoading = true;
             try {
                 const { data } = await baseApi.get("cronograma", {
                     params: { creditos_id: id }
                 })
-                const { default: printCronograma01 } = await import('../pdf/printCronograma01')
-                await printCronograma01(activeEmpresa.value, data.credito, data.cliente, data.cronograma);
+                if (!estado) {
+                    const { default: printCronograma01 } = await import('../pdf/printCronograma01Old')
+                    await printCronograma01(activeEmpresa.value, data.credito, data.cliente, data.cronograma);
+                } else {
+                    const { default: printCronograma02 } = await import('../pdf/printCronograma02')
+                    await printCronograma02(activeEmpresa.value, data.credito, data.cliente, data.cronograma);
+                }
             } catch (e) {
                 console.log(e)
                 toast.error(e)
