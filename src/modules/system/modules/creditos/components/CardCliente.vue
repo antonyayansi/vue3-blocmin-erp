@@ -7,7 +7,7 @@
                 {{ cliente.nombre }}
             </h2>
             <!-- Score Badge -->
-            <div v-if="score.score" class="flex items-center space-x-2">
+            <div v-if="score" class="flex items-center space-x-2">
                 <div class="flex flex-col items-end">
                     <span class="text-xs text-zinc-500 dark:text-zinc-400">Score de crédito</span>
                     <div class="flex items-center space-x-1">
@@ -83,7 +83,7 @@
             <p>Ahorros: <strong>{{ new_pago.ahorros ? formatMoneda(new_pago.ahorros) : '' }}</strong></p>
             ------------------
             <p>Monto adicional: <strong>{{ new_pago.monto_adicional ? formatMoneda(new_pago.monto_adicional) : ''
-            }}</strong>
+                    }}</strong>
             </p>
             <p class="text-red-600 font-bold" v-if="new_pago.dias_vencidos > 0">({{ new_pago.dias_vencidos }} días
                 vencidos, S/. {{

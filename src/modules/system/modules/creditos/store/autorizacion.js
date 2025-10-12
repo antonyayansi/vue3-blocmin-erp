@@ -89,6 +89,22 @@ export const autorizacion = defineStore("autorizacion", {
             } finally {
                 this.isLoading = false;
             }
+        },
+        async onPrintDesembolso(id) {
+            this.isLoading = true;
+            try {
+                const { data } = await baseApi.get("reportDesembolso", {
+                    params: {
+                        creditos_id: id
+                    }
+                })
+                const { default: printDesembolso } = await import('../pdf/printDesembolso');
+                await printDesembolso(activeEmpresa.value, data);
+            } catch (e) {
+                toast.error(e.response.data.message);
+            } finally {
+                this.isLoading = false;
+            }
         }
     }
 })

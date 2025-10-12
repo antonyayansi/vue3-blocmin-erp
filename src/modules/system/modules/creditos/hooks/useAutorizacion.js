@@ -8,7 +8,8 @@ const useAutorizacion = () => {
         ...autorizacionStore,
         getCreditos: autorizacion().getCreditos,
         onAutorizacion: autorizacion().onAutorizacion,
-        onPrintDjAndPagare: autorizacion().onPrintDjAndPagare
+        onPrintDjAndPagare: autorizacion().onPrintDjAndPagare,
+        onPrintDesembolso: autorizacion().onPrintDesembolso,
     }
 }
 

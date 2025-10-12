@@ -39,8 +39,9 @@
                 <tbody>
                     <tr v-for="credito in creditos" :key="credito"
                         class="cursor-default text-sm border-b border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800">
-                        <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300">{{
-                            credito.id.toString().padStart(4, '0') }}</td>
+                        <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300 hover:text-primary-500 hover:underline cursor-pointer"
+                            @click="onPrintDesembolso(credito.id)">{{
+                                credito.id.toString().padStart(4, '0') }}</td>
                         <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300">{{
                             format(new Date(credito.created_at), 'dd/MM/yyyy') }}</td>
                         <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300">{{
@@ -144,7 +145,8 @@ const {
     new_autorizacion,
     tipo_credito,
     onAutorizacion,
-    onPrintDjAndPagare
+    onPrintDjAndPagare,
+    onPrintDesembolso
 } = useAutorizacion()
 
 const openAutorizacion = (credito, tipo = 'Aprobacion') => {
