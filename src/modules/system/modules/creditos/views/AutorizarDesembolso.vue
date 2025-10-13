@@ -33,7 +33,7 @@
                         <th class="w-[100px] p-2 text-right">Cuota</th>
                         <th class="w-[100px] p-2 text-right">T.E.M</th>
                         <th class="w-[100px] p-2 text-center">Estado</th>
-                        <th class="w-[130px] p-2 text-right"></th>
+                        <th class="w-[150px] p-2 text-right"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,6 +68,8 @@
                                     variant="outlined" severity="danger" size="small" />
                             </div>
                             <div v-else class="flex space-x-2 justify-end">
+                                <Button @click="onPrintDesembolso(credito.id)" icon="pi pi-print" variant="outlined"
+                                    severity="success" size="small" />
                                 <Button @click="getCronogramaPDF(credito.id)" icon="pi pi-print" variant="outlined"
                                     severity="info" size="small" />
                                 <Button v-tooltip.top="'Imprimir DJ y Pagaré'" @click="onPrintDjAndPagare(credito.id)"

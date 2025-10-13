@@ -132,19 +132,19 @@ const printCronograma02 = async (empresa, credito, cliente, cronograma) => {
     });
 
     //resumen depues de la tabla
-    let y = doc.lastAutoTable.finalY + 5
+    // let y = doc.lastAutoTable.finalY + 5
 
-    let aporte = new Decimal(credito.aporte ?? 0).toNumber()
-    let importe_total = new Decimal(credito.importe ?? 0).add(new Decimal(credito.interes ?? 0)).add(new Decimal(credito.aporte ?? 0)).toNumber()
-    let total_comision = new Decimal(credito.comision ?? 0).times(new Decimal(credito.nro_cuotas ?? 0)).toNumber()
-    let total_ahorros = new Decimal(credito.ahorros ?? 0).times(new Decimal(credito.nro_cuotas ?? 0)).toNumber()
+    // let aporte = new Decimal(credito.aporte ?? 0).toNumber()
+    // let importe_total = new Decimal(credito.importe ?? 0).add(new Decimal(credito.interes ?? 0)).add(new Decimal(credito.aporte ?? 0)).toNumber()
+    // let total_comision = new Decimal(credito.comision ?? 0).times(new Decimal(credito.nro_cuotas ?? 0)).toNumber()
+    // let total_ahorros = new Decimal(credito.ahorros ?? 0).times(new Decimal(credito.nro_cuotas ?? 0)).toNumber()
 
-    doc.setFontSize(10)
-    doc.text(`Total de intereses: ${formatMoneda(credito.interes)}`, 10, y + 5)
-    doc.text(`Total de capital: ${formatMoneda(credito.importe)}`, 10, y + 10)
-    doc.text(`Aporte: ${formatMoneda(aporte)}`, 10, y + 15)
-    doc.text(`Importe a pagar: ${formatMoneda(importe_total)}`, 10, y + 20)
-    doc.text(`Total de ahorros ${formatMoneda(total_ahorros)}`, 10, y + 25)
+    // doc.setFontSize(10)
+    // doc.text(`Total de intereses: ${formatMoneda(credito.interes)}`, 10, y + 5)
+    // doc.text(`Total de capital: ${formatMoneda(credito.importe)}`, 10, y + 10)
+    // doc.text(`Aporte: ${formatMoneda(aporte)}`, 10, y + 15)
+    // doc.text(`Importe a pagar: ${formatMoneda(importe_total)}`, 10, y + 20)
+    // doc.text(`Total de ahorros ${formatMoneda(total_ahorros)}`, 10, y + 25)
 
     var pageCount = doc.internal.getNumberOfPages();
 

@@ -69,6 +69,7 @@ export const credito = defineStore("credito", {
             try {
                 const { data } = await baseApi.get("clientes_combo");
                 this.comboClientes = data.map(cliente => ({
+                    documento: cliente.documento,
                     codigo: cliente.codigo,
                     descripcion: `${cliente.descripcion} - ${cliente.documento}`,
                 }));
