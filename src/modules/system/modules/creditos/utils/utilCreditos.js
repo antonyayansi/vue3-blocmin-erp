@@ -123,16 +123,18 @@ export const generarCuotas = (fechaInicio, modoPago, importePrestamo, nroCuotas,
             capital = saldoCapital;
         }
 
+        // Guardar el saldo antes de actualizar (para mostrar en la tabla)
+        const saldoAnterior = saldoCapital;
         saldoCapital = saldoCapital.minus(capital);
 
         // Calcular el total de la cuota (siempre igual para todas las cuotas)
-        const cuotaTotal = pagoMensualTotalDec.plus(comision_periodo).plus(cuota_gastos).plus(ahorro_periodo);
+        const cuotaTotal = pagoMensualTotalDec.plus(comision_periodo).plus(ahorro_periodo);
 
         const cuota = {
             cuota_nro: cuotas.length + 1,
             cuota_dia: nombreDia(fecha),
             cuota_fecha: format(fecha, 'dd/MM/yyyy'),
-            cuota_saldo: saldoCapital.greaterThan(0) ? saldoCapital.plus(capital).toFixed(2) : '0.00',
+            cuota_saldo: saldoAnterior.toFixed(2),
             cuota_capital: capital.toFixed(2),
             cuota_interes: interes.toFixed(2),
             cuota_comision: comision_periodo.toFixed(2),

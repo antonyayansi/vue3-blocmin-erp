@@ -97,8 +97,8 @@ const printCronograma02 = async (empresa, credito, cliente, cronograma) => {
         }),
         foot: [[
             { content: 'TOTAL', colSpan: 4, styles: { halign: 'right', fontStyle: 'bold' } },
-            { content: formatMoneda(totalCapital), styles: { halign: 'right', fontStyle: 'bold' } },
-            { content: formatMoneda(totalInteres), styles: { halign: 'right', fontStyle: 'bold' } },
+            { content: formatMoneda(credito?.importe ?? 0), styles: { halign: 'right', fontStyle: 'bold' } },
+            { content: formatMoneda(credito?.interes ?? 0), styles: { halign: 'right', fontStyle: 'bold' } },
             { content: formatMoneda(totalComision), styles: { halign: 'right', fontStyle: 'bold' } },
             { content: formatMoneda(totalCuota), styles: { halign: 'right', fontStyle: 'bold' } },
             { content: '', styles: { halign: 'center' } }

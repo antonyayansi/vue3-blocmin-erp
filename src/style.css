@@ -16,3 +16,30 @@
 --color-primary-900: var(--color-blue-900);
 --color-primary-950: var(--color-blue-950);
 }
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: oklch(92.8% 0.006 264.531);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: oklch(55.2% 0.016 285.938);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: oklch(37% 0.013 285.805);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: oklch(27.4% 0.006 286.033);
+}
