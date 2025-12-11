@@ -115,12 +115,13 @@
                         <tr
                             class="text-sm sticky top-0 z-[4] text-zinc-700 bg-zinc-200 dark:bg-zinc-700 dark:text-white  ">
                             <th class="w-[50px] p-2 text-left">Nro</th>
-                            <th class="w-[100px] p-2 text-left">Día</th>
+                            <th class="w-[50px] p-2 text-left">Día</th>
                             <th class="w-[100px] p-2 text-left">Fecha</th>
                             <th class="w-[100px] p-2 text-right">Saldo</th>
                             <th class="w-[100px] p-2 text-right">Capital</th>
                             <th class="w-[100px] p-2 text-right">Interés</th>
                             <th class="w-[100px] p-2 text-right">Comisión</th>
+                            <th class="w-[100px] p-2 text-right">Gastos</th>
                             <th class="w-[100px] p-2 text-right">Cuota</th>
                             <!-- <th class="w-[130px] p-2 text-right"></th> -->
                         </tr>
@@ -142,6 +143,8 @@
                                 cuota.cuota_interes }}</td>
                             <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300 text-right">{{
                                 cuota.cuota_comision }}</td>
+                            <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300 text-right">{{
+                                cuota.cuota_gastos }}</td>
                             <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300 font-bold text-right">{{
                                 cuota.cuota_total }}</td>
                         </tr>

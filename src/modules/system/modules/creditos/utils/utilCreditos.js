@@ -74,43 +74,64 @@ export const generarCuotas = (fechaInicio, modoPago, importePrestamo, nroCuotas,
         //para generar la cuota_gastos
         let cuota_gastos = 0;
 
+        // NUEVOS RANGOS CORREGIDOS SEGÚN TABLAS
         const rangosDiario = [
-            { min: 100, max: 399, cuota: 0.20 },
-            { min: 400, max: 899, cuota: 0.50 },
-            { min: 900, max: 1599, cuota: 1.00 },
-            { min: 1600, max: 2099, cuota: 1.50 },
-            { min: 2100, max: 2899, cuota: 2.00 },
-            { min: 2900, max: 3699, cuota: 2.50 },
-            { min: 3700, max: 4599, cuota: 4.00 },
-            { min: 4600, cuota: 5.00 }
+            { min: 100, max: 300, cuota24: 0.20, cuota48: 0.50, cuota72: 0.10 },
+            { min: 400, max: 800, cuota24: 0.50, cuota48: 0.30, cuota72: 0.10 },
+            { min: 900, max: 1500, cuota24: 1.00, cuota48: 0.50, cuota72: 0.30 },
+            { min: 1600, max: 2000, cuota24: 1.50, cuota48: 0.80, cuota72: 0.40 },
+            { min: 2100, max: 2800, cuota24: 2.00, cuota48: 1.00, cuota72: 0.50 },
+            { min: 2900, max: 3600, cuota24: 2.50, cuota48: 1.30, cuota72: 0.08 },
+            { min: 3700, max: 4500, cuota24: 4.00, cuota48: 2.00, cuota72: 1.00 },
+            { min: 4600, max: 5000, cuota24: 5.00, cuota48: 2.50, cuota72: 1.30 }
         ];
 
         const rangosSemanal = [
-            { min: 500, max: 999, cuota: 5.00 },
-            { min: 1000, max: 1499, cuota: 10.00 },
-            { min: 1500, max: 1999, cuota: 15.00 },
-            { min: 2000, max: 2499, cuota: 20.00 },
-            { min: 2500, max: 2999, cuota: 25.00 },
-            { min: 3000, max: 3499, cuota: 30.00 },
-            { min: 3500, max: 3999, cuota: 35.00 },
-            { min: 4000, max: 4999, cuota: 40.00 },
-            { min: 5000, cuota: 50.00 }
+            { min: 500, max: 999, cuota4: 5, cuota8: 2.5, cuota12: 1 },
+            { min: 1000, max: 1499, cuota4: 10, cuota8: 5, cuota12: 2.5 },
+            { min: 1500, max: 1999, cuota4: 15, cuota8: 7.5, cuota12: 3.5 },
+            { min: 2000, max: 2499, cuota4: 20, cuota8: 10, cuota12: 5 },
+            { min: 2500, max: 2999, cuota4: 25, cuota8: 12, cuota12: 6 },
+            { min: 3000, max: 3499, cuota4: 30, cuota8: 15, cuota12: 8 },
+            { min: 3500, max: 3999, cuota4: 35, cuota8: 15, cuota12: 8 },
+            { min: 4000, max: 4999, cuota4: 40, cuota8: 20, cuota12: 10 },
+            { min: 5000, max: 9999, cuota4: 50, cuota8: 20, cuota12: 10 }
         ];
 
-        function calcularCuotaGasto(rangos) {
-            for (const rango of rangos) {
-                if ((rango.max ? (importeNum.greaterThanOrEqualTo(rango.min) && importeNum.lessThanOrEqualTo(rango.max)) : importeNum.greaterThanOrEqualTo(rango.min))) {
-                    return new Decimal(rango.cuota);
-                }
+        // FUNCIÓN PARA OBTENER CUOTA GASTOS
+        function obtenerCuotaGasto(modoPago, importe, nroCuotas) {
+            console.log("Calculando cuota gastos para:", { modoPago, importe, nroCuotas });
+            if (modoPago === "diario") {
+                const rango = rangosDiario.find(r =>
+                    importe >= r.min && importe <= r.max
+                );
+                if (!rango) return 0;
+
+                if (nroCuotas === 24) return rango.cuota24;
+                if (nroCuotas === 48) return rango.cuota48;
+                if (nroCuotas === 72) return rango.cuota72;
+                
+                return 0;
             }
-            return new Decimal(0);
+
+            if (modoPago === "semanal") {
+                const rango = rangosSemanal.find(r =>
+                    importe >= r.min && importe <= r.max
+                );
+
+                if (!rango) return 0;
+
+                if (nroCuotas === 4) return rango.cuota4;
+                if (nroCuotas === 8) return rango.cuota8;
+                if (nroCuotas === 12) return rango.cuota12;
+
+                return 0;
+            }
+
+            return 0;
         }
 
-        if (modoPago === 'diario') {
-            cuota_gastos = calcularCuotaGasto(rangosDiario);
-        } else if (modoPago === 'semanal') {
-            cuota_gastos = calcularCuotaGasto(rangosSemanal);
-        }
+        cuota_gastos = obtenerCuotaGasto(modoPago, importeNum.toNumber(), parseInt(nroCuotas));
 
         // Cálculo de interés y capital
         const pagoMensualTotalDec = new Decimal(pagoMensualTotal);
