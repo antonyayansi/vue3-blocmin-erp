@@ -77,6 +77,7 @@
             <div class="col-span-2 md:col-span-1 flex flex-col space-y-1">
                 <label class="text-xs font-medium text-gray-700 dark:text-gray-300">Documento</label>
                 <InputText v-model="new_cliente.documento" id="nro_documento" size="small"
+                    @blur="getDataByDNI()"
                     @keypress.enter="onFocus('nombres')" />
             </div>
             <div class="col-span-4 md:col-span-2 flex flex-col space-y-1">
@@ -144,7 +145,8 @@ const {
     onSubmit,
     resetForm,
     getClienteById,
-    onDelete
+    onDelete,
+    getDataByDNI
 } = useCliente()
 
 const newCliente = () => {

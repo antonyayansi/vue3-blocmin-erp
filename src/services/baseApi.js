@@ -56,3 +56,10 @@ baseApi.interceptors.response.use(
 
 export const version = import.meta.env.VITE_APP_VERSION || "1.0.0";
 export const baseURLImagen = import.meta.env.VITE_IMAGEN_URL || "";
+
+export const dniApi = axios.create({
+  baseURL: import.meta.env.VITE_DNI_API_URL || "",
+  params: {
+    token: import.meta.env.VITE_DNI_API_TOKEN || "",
+  },
+});

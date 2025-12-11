@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { toast } from "vue-sonner";
-import { baseApi } from "../../../../../services/baseApi";
+import { baseApi, dniApi } from "../../../../../services/baseApi";
 
 export const cliente = defineStore("cliente", {
     state: () => ({
@@ -35,6 +35,22 @@ export const cliente = defineStore("cliente", {
                 direccion_laboral: "",
                 telefono: "",
                 email: ""
+            }
+        },
+        async getDataByDNI() {
+            if(this.new_cliente.documento.length !== 8) {
+                return;
+            }
+            this.isLoading = true;
+            try {
+                const { data } = await dniApi.post(`/consulta-dni`, {
+                    dni: this.new_cliente.documento
+                });
+                this.new_cliente.nombre = data.nombre + " " + data.apellidoPaterno + " " + data.apellidoMaterno;
+            } catch (e) {
+                toast.error(e.response.data.message);
+            } finally {
+                this.isLoading = false;
             }
         },
         async getClientes() {

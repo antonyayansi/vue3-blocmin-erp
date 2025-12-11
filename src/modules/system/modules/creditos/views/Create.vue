@@ -15,32 +15,32 @@
                 <label class="text-xs font-medium text-gray-700 dark:text-gray-300">Cliente</label>
                 <Select v-model="new_credito.clientes_id" :options="comboClientes" mode="offline" id="clientes_id"
                     @selected="onFocus('importe')" placeholder="Seleccione un cliente" />
-                <div v-if="new_credito.score" class="flex items-center space-x-2">
+                <div v-if="new_credito.dias_retraso >= 0" class="flex items-center space-x-2">
                     <div class="flex flex-col items-end">
                         <div class="flex items-center space-x-1">
                             <span class="text-xs font-medium mr-1" :class="{
-                                'text-blue-600': new_credito.score.score >= 750,
-                                'text-green-600': new_credito.score.score >= 600 && new_credito.score.score < 750,
-                                'text-yellow-600': new_credito.score.score >= 450 && new_credito.score.score < 600,
-                                'text-red-600': new_credito.score.score < 450
+                                'text-green-600': new_credito.dias_retraso >= 0 && new_credito.dias_retraso <= 5,
+                                'text-yellow-600': new_credito.dias_retraso >= 6 && new_credito.dias_retraso <= 14,
+                                'text-red-600': new_credito.dias_retraso >= 15 && new_credito.dias_retraso <= 24,
+                                'text-black dark:text-white': new_credito.dias_retraso > 24
                             }">
-                                {{ new_credito.score.score >= 750 ? 'Excelente' :
-                                    new_credito.score.score >= 600 ? 'Bueno' :
-                                        new_credito.score.score >= 450 ? 'Regular' : 'Malo' }}
+                                {{ new_credito.dias_retraso <= 5 ? 'Sin deudas vencidas' :
+                                    new_credito.dias_retraso <= 14 ? 'Poco atraso' :
+                                        new_credito.dias_retraso <= 24 ? 'Atraso significativo' : 'Pérdida' }}
                             </span>
                             <span class="text-sm font-bold" :class="{
-                                'text-blue-600': new_credito.score.score >= 750,
-                                'text-green-600': new_credito.score.score >= 600 && new_credito.score.score < 750,
-                                'text-yellow-600': new_credito.score.score >= 450 && new_credito.score.score < 600,
-                                'text-red-600': new_credito.score.score < 450
+                                'text-green-600': new_credito.dias_retraso >= 0 && new_credito.dias_retraso <= 5,
+                                'text-yellow-600': new_credito.dias_retraso >= 6 && new_credito.dias_retraso <= 14,
+                                'text-red-600': new_credito.dias_retraso >= 15 && new_credito.dias_retraso <= 24,
+                                'text-black dark:text-white': new_credito.dias_retraso > 24
                             }">
-                                {{ new_credito.score.score }}
+                                {{ new_credito.dias_retraso }} días
                             </span>
                             <i class="pi pi-circle-fill text-xs" :class="{
-                                'text-blue-600': new_credito.score.score >= 750,
-                                'text-green-600': new_credito.score.score >= 600 && new_credito.score.score < 750,
-                                'text-yellow-600': new_credito.score.score >= 450 && new_credito.score.score < 600,
-                                'text-red-600': new_credito.score.score < 450
+                                'text-green-600': new_credito.dias_retraso >= 0 && new_credito.dias_retraso <= 5,
+                                'text-yellow-600': new_credito.dias_retraso >= 6 && new_credito.dias_retraso <= 14,
+                                'text-red-600': new_credito.dias_retraso >= 15 && new_credito.dias_retraso <= 24,
+                                'text-black dark:text-white': new_credito.dias_retraso > 24
                             }"></i>
                         </div>
                     </div>

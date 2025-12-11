@@ -39,6 +39,8 @@
                             <th class="w-[100px] p-2 text-left">Fecha Venc.</th>
                             <th class="w-[70px] p-2 text-left">Dia</th>
                             <th class="w-[90px] p-2 text-left">Tipo</th>
+                            <th class="w-[90px] p-2 text-right">Saldo Capital</th>
+                            <th class="w-[90px] p-2 text-right">Ahorro Acumulado</th>
                             <th class="w-[100px] p-2 text-right">Cuota</th>
                             <th class="w-[100px] p-2 text-right">Cuotas Pagadas</th>
                             <th class="w-[100px] p-2 text-right">Cuota Pendientes</th>
@@ -48,10 +50,20 @@
                     <tbody>
                         <tr v-for="credito in seguimientos" :key="credito"
                             class="cursor-default text-sm border-b border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800">
-                            <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300">{{
-                                credito?.nombre }}
-                                <span class="block text-xs font-light text-zinc-500 dark:text-zinc-400">{{
-                                    credito?.documento }}</span>
+                            <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300">
+                                <div class="flex items-center space-x-2">
+                                        <i v-if="Math.abs(credito.dias_retraso) >= 0" class="pi pi-circle-fill text-xs" :class="{
+                                            'text-green-600': Math.abs(credito.dias_retraso) >= 0 && Math.abs(credito.dias_retraso) <= 5,
+                                            'text-yellow-600': Math.abs(credito.dias_retraso) >= 6 && Math.abs(credito.dias_retraso) <= 14,
+                                            'text-red-600': Math.abs(credito.dias_retraso) >= 15 && Math.abs(credito.dias_retraso) <= 24,
+                                            'text-black dark:text-white': Math.abs(credito.dias_retraso) > 24
+                                        }"></i>
+                                    <div>
+                                        {{ credito?.nombre }}
+                                        <span class="block text-xs font-light text-zinc-500 dark:text-zinc-400">{{
+                                            credito?.documento }}</span>
+                                    </div>
+                                </div>
                             </td>
                             <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300">{{
                                 format(new Date(`${credito.fecha_vencimiento} 00:00:00`), 'dd/MM/yyyy') }}</td>
@@ -59,14 +71,22 @@
                                 credito.dia_pago }}</td>
                             <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300">{{
                                 credito.modo_pago }}</td>
+                            <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300 text-right">{{
+                                credito.saldo_capital }}</td>
+                            <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300 text-right">{{
+                                credito.ahorros }}</td>
                             <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300 text-right font-bold">{{
                                 formatMoneda(credito.cuota) }}</td>
                             <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300 text-right">{{
                                 credito.cuotas_pagadas }}</td>
                             <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300 text-right">{{
                                 credito.cuotas_pendientes }}</td>
-                            <td :class="credito.dias_retraso < 0 ? 'text-red-500 font-bold' : 'text-zinc-700 dark:text-zinc-300'"
-                                class="px-2 py-1 text-right">{{
+                            <td class="px-2 py-1 text-right font-bold" :class="{
+                                'text-green-600': Math.abs(credito.dias_retraso) >= 0 && Math.abs(credito.dias_retraso) <= 5,
+                                'text-yellow-600': Math.abs(credito.dias_retraso) >= 6 && Math.abs(credito.dias_retraso) <= 14,
+                                'text-red-600': Math.abs(credito.dias_retraso) >= 15 && Math.abs(credito.dias_retraso) <= 24,
+                                'text-black dark:text-white': Math.abs(credito.dias_retraso) > 24
+                            }">{{
                                     credito.dias_retraso }}</td>
                         </tr>
                         <!-- <tr v-if="!seguimientos.length">

@@ -11,7 +11,8 @@ const useCliente = () => {
         onSubmit: cliente().onSubmit,
         resetForm: cliente().resetForm,
         getClienteById: cliente().getClienteById,
-        onDelete: cliente().onDelete
+        onDelete: cliente().onDelete,
+        getDataByDNI: cliente().getDataByDNI,
     }
 }
 
