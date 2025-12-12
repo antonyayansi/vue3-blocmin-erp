@@ -21,6 +21,8 @@ export const cliente = defineStore("cliente", {
             direccion: "",
             direccion_laboral: "",
             telefono: "",
+            telefono_ref1: "",
+            telefono_ref2: "",
             email: ""
         }
     }),

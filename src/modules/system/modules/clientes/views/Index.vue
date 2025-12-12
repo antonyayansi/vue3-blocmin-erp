@@ -108,6 +108,16 @@
             <div class="col-span-4 flex flex-col space-y-1">
                 <label class="text-xs font-medium text-gray-700 dark:text-gray-300">Dirección Laboral</label>
                 <InputText v-model="new_cliente.direccion_laboral" id="direccion_laboral" size="small"
+                    @keypress.enter="onFocus('telefono_ref1')" />
+            </div>
+            <div class=" col-span-4 md:col-span-2 flex flex-col space-y-1">
+                <label class="text-xs font-medium text-gray-700 dark:text-gray-300">Telefono Ref. 1</label>
+                <InputText v-model="new_cliente.telefono_ref1" id="telefono_ref1" size="small"
+                    @keypress.enter="onFocus('telefono_ref2')" />
+            </div>
+            <div class="col-span-4 md:col-span-2 flex flex-col space-y-1">
+                <label class="text-xs font-medium text-gray-700 dark:text-gray-300">Telefono Ref. 2</label>
+                <InputText v-model="new_cliente.telefono_ref2" id="telefono_ref2" size="small"
                     @keypress.enter="onSubmit()" />
             </div>
         </div>
