@@ -4,14 +4,14 @@
     <div class="w-full md:w-1/2 flex items-center justify-center bg-white dark:bg-zinc-900">
       <div class="max-w-md w-full space-y-6 px-6 py-8">
         <div class="text-center">
-          <img :src="logoImg" alt="Logo" class="h-14 mx-auto mb-4" />
+          <img :src="logoImg" alt="Logo" class="h-14 mx-auto mb-4 rounded-md" />
           <h2 class="text-3xl font-extrabold text-zinc-900 dark:text-white">Bienvenido de nuevo</h2>
-          <p class="mt-2 text-sm text-zinc-500">Ingresa tu DNI y clave para continuar</p>
+          <p class="mt-2 text-sm text-zinc-500">Ingrese sus credenciales</p>
         </div>
         <div>
           <label for="correo" class="block text-sm font-medium text-zinc-700 dark:text-zinc-500">Correo</label>
           <InputText v-model="payload.email" 
-            placeholder="Ingrese su correo" 
+            placeholder="Correo" 
             @keypress.enter="onFocus('clave')"
             id="correo"
             type="email"
@@ -19,7 +19,7 @@
         </div>
         <div>
           <label for="clave" class="block text-sm font-medium text-zinc-700 dark:text-zinc-500">Clave</label>
-          <InputText v-model="payload.password" type="password" placeholder="Ingrese su clave"
+          <InputText v-model="payload.password" type="password" placeholder="Contraseña"
             @keypress.enter="onLogin(payload)" id="clave" class="mt-1" fluid />
         </div>
         <div v-if="errorMessage" class="text-rose-500 font-medium bg-rose-500/10 p-2 rounded-md text-sm mt-2">
@@ -69,7 +69,7 @@ import useAuth from '../hooks/useAuth'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import { onFocus } from '@/lib/onFocus'
-import logoImg from '@/assets/logo.jpeg'
+import logoImg from '@/assets/logo.png'
 
 const payload = ref({
   email: '',
