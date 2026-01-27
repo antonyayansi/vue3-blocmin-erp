@@ -206,20 +206,32 @@ const canSelectCuota = (cuota) => {
     // Si la cuota ya está pagada, no se puede seleccionar
     if (cuota.estado === 'pagado') return false;
 
-    // Si es la primera cuota no pagada, siempre se puede seleccionar
-    const cuotasNoPagadas = (props.credito.cuotas ?? []).filter(c => c.estado !== 'pagado');
+    // Obtener todas las cuotas no pagadas ordenadas por número
+    const cuotasNoPagadas = (props.credito.cuotas ?? [])
+        .filter(c => c.estado !== 'pagado')
+        .sort((a, b) => a.numero_cuota - b.numero_cuota);
+
+    // Si no hay cuotas no pagadas, no se puede seleccionar
+    if (cuotasNoPagadas.length === 0) return false;
+
+    // La primera cuota no pagada siempre se puede seleccionar
     const primeraNoPageada = cuotasNoPagadas[0];
+    if (cuota.numero_cuota === primeraNoPageada.numero_cuota) return true;
 
-    if (cuota.numero_cuota === primeraNoPageada?.numero_cuota) return true;
+    // Para las demás cuotas, verificar que haya una secuencia continua desde la primera
+    // Encontrar la posición de esta cuota en el array de cuotas no pagadas
+    const indiceCuotaActual = cuotasNoPagadas.findIndex(c => c.numero_cuota === cuota.numero_cuota);
+    
+    if (indiceCuotaActual === -1) return false;
 
-    // Para las demás cuotas, verificar que todas las anteriores estén seleccionadas
-    const cuotasAnteriores = (props.credito.cuotas ?? []).filter(c =>
-        c.estado !== 'pagado' &&
-        c.numero_cuota < cuota.numero_cuota
-    );
+    // Verificar que todas las cuotas anteriores en la secuencia estén seleccionadas
+    for (let i = 0; i < indiceCuotaActual; i++) {
+        if (!cuotasNoPagadas[i].checked) {
+            return false;
+        }
+    }
 
-    // Todas las cuotas anteriores no pagadas deben estar seleccionadas
-    return cuotasAnteriores.every(c => c.checked);
+    return true;
 }
 
 // Función para manejar el cambio de estado de una cuota

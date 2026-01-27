@@ -62,4 +62,5 @@ export const dniApi = axios.create({
   params: {
     token: import.meta.env.VITE_DNI_API_TOKEN || "",
   },
+  withCredentials: false,
 });
