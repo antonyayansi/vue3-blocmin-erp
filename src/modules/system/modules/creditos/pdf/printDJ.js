@@ -149,7 +149,7 @@ const reportDJ = async (empresa, credito, cliente) => {
     doc.setFont(undefined, 'normal')
     doc.text(`Así mismo declaro que tengo conocimiento del contenido y alcances de lo prescrito por el art. 179º de la Ley Nº 26702 Ley General del Sistema Financiero y las sanciones de carácter penal (art. 247° del Código Penal), que establece la norma en caso de falsedad en la información brindada e incumplimiento de todo lo declarado.`,
         15, 220, { align: 'justify', maxWidth: 180 })
-    doc.text(`Al amparo del art. 729° del C.P.C. YO (NOSOTROS) y la COOPERATIVA CREDI SUR S.A. CONVENIMOS que en el caso que nuestros bienes sean embargados la COOPERATIVA CREDI SUR S.A. alcanzara una Tasación del (los) bien (es) de mi (nuestra) propiedad al Juzgado para dar mi (nuestra) aprobación, al ser notificados de acuerdo a ley y en los plazos establecidos.`,
+    doc.text(`Al amparo del art. 729° del C.P.C. YO (NOSOTROS) y ${empresa.razon_social} CONVENIMOS que en el caso que nuestros bienes sean embargados ${empresa.razon_social} alcanzara una Tasación del (los) bien (es) de mi (nuestra) propiedad al Juzgado para dar mi (nuestra) aprobación, al ser notificados de acuerdo a ley y en los plazos establecidos.`,
         15, 235, { align: 'justify', maxWidth: 180 })
 
     //fecha a la izquierda

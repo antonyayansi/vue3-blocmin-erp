@@ -57,28 +57,18 @@ const printPagare = async (empresa, credito, cliente) => {
     doc.text(`${credito.id?.toString().padStart(4, '0')}`, 30, 50)
 
     doc.setFont(undefined, 'normal')
-    doc.text('PAGARE/PAGAREMOS el presente título valor a la orden de COOPERATIVA CREDI SUR SAC., en adelante COOPERATIVA CREDI SUR SAC. o a su legítimo tenedor al momento de su vencimiento, en las oficinas del tenedor o donde sea presentado el titulo para su cobro por la suma',
+    doc.text(`PAGARE/PAGAREMOS el presente título valor a la orden de ${empresa.razon_social}, en adelante ${empresa.razon_social} o a su legítimo tenedor al momento de su vencimiento, en las oficinas del tenedor o donde sea presentado el titulo para su cobro por la suma ${credito.cuota} que hemos recibido de la EMPRESA ${empresa.razon_social}. a mi /nuestra entera satisfacción, este importe generara desde la fecha su emisión hasta la fecha de su vencimiento un interés compensatorio a la tasa de ${credito.tem} % MENSUAL, la cual es capitalizable en términos efectivos, reconociendo también se genera a partir del vencimiento el pago de interese moratorios a la tasa de  0,1 % mensual, los cuales se sumaran hasta la total cancelación de la obligación contenida en el presente título; así como comisiones, penalidades, seguros y gastos, que se pudieran devengar des la fecha de emisión hasta la cancelación total de la presente obligación, sin que sea necesario requerimiento de pago para constituirme/constituirnos en mora, la que se producirá de modo automático.`,
         15, 60,
         { maxWidth: 180, align: 'justify' }
     )
-    doc.setFont(undefined, 'bold')
-    doc.text(`${credito.cuota}`, 125, 68)
-    doc.setFont(undefined, 'normal')
-    doc.text('que hemos recibido de la COOPE-', 140, 68, { maxWidth: 80, align: 'justify' })
 
-    let parrafo1 = `RATIVA CREDI SUR SAC. a mi /nuestra entera satisfacción, este importe generara desde la fecha su emisión hasta la fecha de su vencimiento un interés compensatorio a la tasa de ${credito.tem} % MENSUAL, la cual es capitalizable en términos efectivos, reconociendo también se genera a partir del vencimiento el pago de interese moratorios a la tasa de  0,1 % mensual, los cuales se sumaran hasta la total cancelación de la obligación contenida en el presente título; así como comisiones, penalidades, seguros y gastos, que se pudieran devengar des la fecha de emisión hasta la cancelación total de la presente obligación, sin que sea necesario requerimiento de pago para constituirme/constituirnos en mora, la que se producirá de modo automático.`
-    doc.text(parrafo1,
-        15, 73,
-        { maxWidth: 180, align: 'justify' }
-    )
-
-    let parrafo2 = `Expresamente acepto/aceptamos toda variación de las tasas de interés, comisiones y gastos de acuerdo a ley, las cuales se aplican sobre el saldo pendiente de este Pagaré a la fecha de la variación bastando que las mismas sean exhibidas en el tarifario de la COOPERATIVA CREDI SUR SAC o menos sean comunicadas por cualquier medio.`
+    let parrafo2 = `Expresamente acepto/aceptamos toda variación de las tasas de interés, comisiones y gastos de acuerdo a ley, las cuales se aplican sobre el saldo pendiente de este Pagaré a la fecha de la variación bastando que las mismas sean exhibidas en el tarifario de ${empresa.razon_social} o menos sean comunicadas por cualquier medio.`
     doc.text(parrafo2,
         15, 105,
         { maxWidth: 180, align: 'justify' }
     )
 
-    let parrafo3 = `Asimismo, convengo/convenimos en establecer que el pago de este título valor, se realizara en el domicilio de la COOPERATIVA CREDI SUR SAC o agencia de esta (dependiendo del lugar de emisión) o mediante “cargo en mi/nuestra cuenta de ahorros abierta en la COOPERATIVA CREDI SUR SAC”, por lo que a su vencimiento y en caso que la cuenta de cargo no tuviera fondos autosuficientes de la COOPERATIVA CREDI SUR SAC podrá dejar constancia de ello en el propio título valor, la cual surtirá efectos del protesto bajo modalidad sustitutoria contemplada en la ley de títulos Valores vigente, autorizo, autorizamos al tenedor la compensación y a la realizar retiros de mi/nuestras cuenta(s) de ahorro o plazo fijo para amortizar o cancelar la presente obligación y sus renovaciones y/o refinanciamiento, facultándola a la conversión de monedas de acuerdo al tipo de cambio de fijado por ella misma.`
+    let parrafo3 = `Asimismo, convengo/convenimos en establecer que el pago de este título valor, se realizara en el domicilio de ${empresa.razon_social} o agencia de esta (dependiendo del lugar de emisión) o mediante “cargo en mi/nuestra cuenta de ahorros abierta en ${empresa.razon_social}”, por lo que a su vencimiento y en caso que la cuenta de cargo no tuviera fondos autosuficientes de ${empresa.razon_social} podrá dejar constancia de ello en el propio título valor, la cual surtirá efectos del protesto bajo modalidad sustitutoria contemplada en la ley de títulos Valores vigente, autorizo, autorizamos al tenedor la compensación y a la realizar retiros de mi/nuestras cuenta(s) de ahorro o plazo fijo para amortizar o cancelar la presente obligación y sus renovaciones y/o refinanciamiento, facultándola a la conversión de monedas de acuerdo al tipo de cambio de fijado por ella misma.`
     doc.text(parrafo3,
         15, 120,
         { maxWidth: 180, align: 'justify' }
@@ -101,7 +91,7 @@ const printPagare = async (empresa, credito, cliente) => {
         15, 185,
         { maxWidth: 180, align: 'justify' }
     )
-    let parrafo7 = `Autorizo/autorizamos a la COOPERATIVA CREDI SUR SAC la compensación de mi/nuestra (s) cuenta (s) en sus diferentes modalidades o plazo fijo que en cualquier moneda mantenga/mantengamos para amortizar o cancelar la presente obligación y sus prorrogas, renovación es y (o refinanciamiento) facultamos al tenedor a completar el presente con el saldo deudor que adeudo (amos).`
+    let parrafo7 = `Autorizo/autorizamos a ${empresa.razon_social} la compensación de mi/nuestra (s) cuenta (s) en sus diferentes modalidades o plazo fijo que en cualquier moneda mantenga/mantengamos para amortizar o cancelar la presente obligación y sus prorrogas, renovación es y (o refinanciamiento) facultamos al tenedor a completar el presente con el saldo deudor que adeudo (amos).`
     doc.text(parrafo7,
         15, 195,
         { maxWidth: 180, align: 'justify' }
@@ -111,7 +101,7 @@ const printPagare = async (empresa, credito, cliente) => {
         15, 215,
         { maxWidth: 180, align: 'justify' }
     )
-    let parrafo9 = `Dejo/dejamos constancia que nuestro domicilio es el declarado en el presente título valor. En el caso de incumplimiento de las obligaciones derivada de este Pagare nos sometemos a la competencia de los jueces, juzgados y/o Órganos Competentes del distrito de CUSCO provincia de CUSCO y departamento de CUSCO`
+    let parrafo9 = `Dejo/dejamos constancia que nuestro domicilio es el declarado en el presente título valor. En el caso de incumplimiento de las obligaciones derivada de este Pagare nos sometemos a la competencia de los jueces, juzgados y/o Órganos Competentes del distrito de ${empresa.distrito ?? '__________________'} provincia de ${empresa.provincia ?? '__________________'} y departamento de ${empresa.departamento ?? '__________________'}`
     doc.text(parrafo9,
         15, 230,
         { maxWidth: 180, align: 'justify' }
@@ -210,7 +200,7 @@ const printPagare = async (empresa, credito, cliente) => {
         doc.setFont(undefined, 'normal')
         doc.setFontSize(8)
         doc.text(`Prov. ${empresa.departamento ?? ''} - ${empresa.provincia ?? ''} - ${empresa.distrito ?? ''}`, 32, 14)
-        doc.text(`SEDE: ${empresa.sede}`, 32, 18)
+        doc.text(`SEDE: ${empresa.sede ?? 'Principal'}`, 32, 18)
         doc.setTextColor(112, 2, 2)
         doc.setFontSize(4)
 
