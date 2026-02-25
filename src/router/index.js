@@ -4,6 +4,7 @@ import routerSystem from '../modules/system/router'
 import isAuth from '../middleware/isAuth'
 import isRedirect from '../middleware/isRedirect'
 import topbar from 'topbar'
+import isPermission from '../middleware/isPermission'
 
 topbar.config({
     barThickness: 4,
@@ -16,7 +17,8 @@ const routes = [
         path: '/',
         name: 'system',
         ...routerSystem,
-        beforeEnter: [isAuth],
+        beforeEnter: [isPermission]
+        // beforeEnter: [isAuth],
     },
     {
         path: '/login',

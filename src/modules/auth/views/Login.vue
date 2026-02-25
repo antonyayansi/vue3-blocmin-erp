@@ -37,6 +37,17 @@
         </div>
         <div class="space-y-4">
           <Button :loading="isLoading" :disabled="isLoading" label="Iniciar Sesión" @click="onLogin(payload)" fluid />
+          <p class="text-center text-sm text-zinc-600 dark:text-zinc-300">
+            Si no tienes cuenta,
+            <a
+              href="https://wa.me/51948347640?text=Hola%2C%20quisiera%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Blocmin%20ERP"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-semibold text-primary-600 hover:underline"
+            >
+              nosotros te la creamos
+            </a>
+          </p>
           <!-- <GoogleLogin :callback="callback" style="width: 100%">
             <Button class="w-full" label="Ingresar con Google" variant="outlined" icon="pi pi-google" type="button" />
           </GoogleLogin> -->
@@ -56,6 +67,30 @@
         <p class="text-sm opacity-80">Optimiza tus operaciones, mejora la productividad y toma decisiones informadas con nuestra solución integral.</p>
         <p class="text-sm opacity-80">Gestiona inventarios, ventas, compras, finanzas y más desde una única plataforma.</p>
         <p class="text-sm opacity-80">¡Impulsa tu negocio con Blocmin ERP!</p>
+        <div class="pt-4 flex flex-wrap items-center justify-center gap-3">
+          <a
+            href="https://wa.me/51948347640?text=Hola%2C%20quisiera%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Blocmin%20ERP"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-4 py-2 rounded-md border border-white/40 text-sm font-medium hover:bg-white/10 transition"
+          >
+            WhatsApp
+          </a>
+          <a
+            href="mailto:ventas@blocmin.com"
+            class="px-4 py-2 rounded-md border border-white/40 text-sm font-medium hover:bg-white/10 transition"
+          >
+            Correo
+          </a>
+          <a
+            href="https://www.youtube.com/@ccoreerp"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-4 py-2 rounded-md border border-white/40 text-sm font-medium hover:bg-white/10 transition"
+          >
+            YouTube
+          </a>
+        </div>
         <!-- <p class="text-sm opacity-80">Desarrollado por <a href="https://github.com/antonyayansi" target="_blank" class="underline font-medium">@dankira</a></p> -->
         <!-- <img src="/home/danki/Descargas/logo (1).jpeg" alt="Panel CRM" class="rounded-lg shadow-lg w-full" /> -->
       </div>

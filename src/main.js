@@ -14,6 +14,7 @@ import "./style.css";
 import "vue-sonner/style.css";
 import "primeicons/primeicons.css";
 import "vue-awesome-paginate/dist/style.css";
+import 'primeicons/primeicons.css'
 
 createApp(App)
   .use(router)

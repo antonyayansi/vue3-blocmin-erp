@@ -24,10 +24,12 @@ export const system = defineStore("system", {
         this.empresas = data;
         if (data.length === 1) {
           this.activeEmpresa = data[0];
-          const jwtEmpresa = await firmarJWT(this.activeEmpresa);
+          const jwtEmpresa = await firmarJWT(data[0]);
           localStorage.setItem("bloc-empresa", jwtEmpresa);
+          location.reload();
         }
       } catch (e) {
+        console.error(e);
         toast.error(
           e?.response?.data?.message || "Error al cargar las empresas"
         );
@@ -50,7 +52,7 @@ export const system = defineStore("system", {
         console.error("JWT verification failed:", e);
       }
     },
-    async getSedes() {
+    async getSedes(empresaId) {
       this.isLoading = true;
       try {
         const { data } = await baseApi.get("sedes", {

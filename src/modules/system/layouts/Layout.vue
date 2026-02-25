@@ -1,8 +1,11 @@
 <template>
-    <div v-if="activeEmpresa">
-        <Sidebar />
+    <div v-if="isUser">
+        <div v-if="activeEmpresa">
+            <Sidebar />
+        </div>
+        <MisEmpresas v-else />
     </div>
-    <MisEmpresas v-else />
+    <Home v-else />
     <Dialog v-model:visible="openModalSede" modal :close-on-escape="false" :dismissable-mask="false" :closable="false"
         pt:mask:class="backdrop-blur-sm" header="Seleccionar Sede" :style="{ width: '90vw', maxWidth: '600px' }">
         <Sedes />
@@ -15,6 +18,7 @@ import useSystem from '../hooks/useSystem';
 import Sidebar from '../components/Sidebar.vue';
 import { Dialog } from 'primevue';
 import Sedes from '../components/Sedes.vue';
+import Home from '../../public/Home.vue';
 
 const {
     activeEmpresa,
@@ -23,6 +27,8 @@ const {
     checkMenus,
     checkSede,
 } = useSystem();
+
+const isUser = localStorage.getItem('bloc-user') ? true : false
 
 checkEmpresa()
 checkSede()
