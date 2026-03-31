@@ -37,6 +37,11 @@ export default {
             name: 'creditos.seguimiento',
             path: '/crediseguimiento',
             component: () => import('../views/Seguimiento.vue')
+        },
+        {
+            name: 'creditos.dashboard',
+            path: '/credidashboard',
+            component: () => import('../views/Dashboard.vue')
         }
     ]
 }

@@ -31,7 +31,13 @@ export const credireporte = defineStore("credireporte", {
             cant_reg: 10,
             modo_pago: 'diario'
         },
-        seguimientos: []
+        seguimientos: [],
+        //dashboard
+        filtro: {
+            fecha_inicio: format(new Date(), 'yyyy-MM-01'),
+            fecha_fin: format(new Date(), 'yyyy-MM-dd'),
+        },
+        creditos_all: []
     }),
     actions: {
         async getLibroIngreso(exportar = false) {
@@ -149,6 +155,20 @@ export const credireporte = defineStore("credireporte", {
             } finally {
                 this.isLoading = false;
             }
+        },
+        //dashboard
+        async getCreditosDashboard() {
+            this.isLoading = true;
+            try {
+                const { data } = await baseApi.get("creditos_all", {
+                    params: this.filtro
+                })
+                this.creditos_all = data
+            } catch (e) {
+                toast.error(e.response.data.message)
+            } finally {
+                this.isLoading = false;
+            }  
         }
     }
 })

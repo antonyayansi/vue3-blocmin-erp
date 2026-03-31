@@ -11,6 +11,7 @@ export const useCrediReporte = () => {
         getEstadosCredito: credireporte().getEstadosCredito,
         getMovimientosCredito: credireporte().getMovimientosCredito,
         getSeguimientoCredito: credireporte().getSeguimientoCredito,
-        exportSeguimientoCredito: credireporte().exportSeguimientoCredito
+        exportSeguimientoCredito: credireporte().exportSeguimientoCredito,
+        getCreditosDashboard: credireporte().getCreditosDashboard
     }
 }
