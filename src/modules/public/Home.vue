@@ -248,20 +248,12 @@ const stats = [
 
 const modules = [
     {
-        icon: '💳',
-        title: 'Créditos & Préstamos',
-        desc: 'Gestión completa de colocaciones, cronogramas, cobranzas y cuentas por cobrar con reportes en tiempo real.',
-        tags: ['Cronograma', 'Cobros', 'Mora', 'Reportes'],
-        color: '#0ea5e9',
-        featured: true,
-    },
-    {
         icon: '🧾',
         title: 'Punto de Venta & Facturación',
         desc: 'POS ágil con facturación electrónica, boletas, notas de crédito, control de caja y arqueo diario.',
         tags: ['POS', 'Factura E.', 'Caja', 'IGV'],
         color: '#6366f1',
-        featured: false,
+        featured: true,
     },
     {
         icon: '🏨',
@@ -293,6 +285,14 @@ const modules = [
         desc: 'Asistencia, planillas, vacaciones, contratos, documentos y reportes de productividad por empleado.',
         tags: ['Asistencia', 'Planilla', 'Contratos', 'RRHH'],
         color: '#ec4899',
+        featured: false,
+    },
+    {
+        icon: '💳',
+        title: 'Créditos & Préstamos',
+        desc: 'Gestión completa de colocaciones, cronogramas, cobranzas y cuentas por cobrar con reportes en tiempo real.',
+        tags: ['Cronograma', 'Cobros', 'Mora', 'Reportes'],
+        color: '#0ea5e9',
         featured: false,
     },
     {

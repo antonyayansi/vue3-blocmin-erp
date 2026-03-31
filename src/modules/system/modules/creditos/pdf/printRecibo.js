@@ -121,12 +121,14 @@ const reportRecibo = async (empresa, sede, data) => {
     //suma de todos los detalles o cuotas pagadas
     let interes = 0;
     let capital = 0;
+    let ahorro = 0;
     let saldo_primero = detalle[0]?.saldo;
     let gastos = new Decimal(detalle[0]?.gastos ?? 0).mul(detalle.length ?? 1).toNumber();
 
     for (let i = 0; i < detalle.length; i++) {
         interes += new Decimal(detalle[i]?.interes).toNumber();
         capital += new Decimal(detalle[i]?.capital).toNumber();
+        ahorro += new Decimal(detalle[i]?.ahorros).toNumber();
     }
 
     if (gastos < interes) {
@@ -162,6 +164,12 @@ const reportRecibo = async (empresa, sede, data) => {
     doc.text('Interes compensat.', 7, y);
     doc.text('S/', 55, y);
     doc.text(formatMoneda(interes), 72, y, 'right');
+    y += 4;
+
+    // Ahorro
+    doc.text('Ahorro', 7, y);
+    doc.text('S/', 55, y);
+    doc.text(formatMoneda(ahorro), 72, y, 'right');
     y += 4;
 
     // Gastos

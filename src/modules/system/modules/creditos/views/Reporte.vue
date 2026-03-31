@@ -26,12 +26,12 @@
                         <tr
                             class="text-sm sticky top-0 z-[4] text-zinc-700 bg-zinc-200 dark:bg-zinc-700 dark:text-white  ">
                             <th class="w-[100px] p-2 text-left">Fecha</th>
-                            <th class="w-[100px] p-2 text-left">N° Documento</th>
                             <th class="w-[200px] p-2 text-left">Nombres</th>
                             <th class="w-[100px] p-2 text-right">Monto</th>
-                            <th class="w-[100px] p-2 text-right">Total Cuotas</th>
+                            <th class="w-[100px] p-2 text-right">N° de Cuotas</th>
+                            <th class="w-[100px] p-2 text-right">Debe</th>
                             <th class="w-[100px] p-2 text-right">Cuotas Pagadas</th>
-                            <th class="w-[100px] p-2 text-right">Monto Cuota</th>
+                            <th class="w-[100px] p-2 text-right">Monto Cuota 1</th>
                             <th class="w-[100px] p-2 text-right">Saldo Capital</th>
                             <th class="w-[100px] p-2 text-right">Interes</th>
                             <th class="w-[100px] p-2 text-right">Saldo Pagado</th>
@@ -43,13 +43,15 @@
                             <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300">{{
                                 format(new Date(credito.Fecha_Desembolso), 'dd/MM/yyyy') }}</td>
                             <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300">{{
-                                credito?.DNI }}</td>
-                            <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300">{{
-                                credito.Nombre }}</td>
+                                credito.Nombre }}
+                                <p class="text-xs text-zinc-500">{{ credito?.DNI }}</p>
+                            </td>
                             <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300 text-right font-bold">{{
                                 formatMoneda(credito.Monto) }}</td>
                             <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300 text-right">{{
                                 credito.Total_Cuotas }}</td>
+                            <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300 text-right">{{
+                                new Decimal(credito.Total_Cuotas).sub(credito.Cuotas_Pagadas).toNumber() }}</td>
                             <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300 text-right">{{
                                 credito.Cuotas_Pagadas }}</td>
                             <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300 text-right">{{
@@ -82,6 +84,7 @@ import IconField from 'primevue/iconfield'
 import InputIcon from 'primevue/inputicon'
 import { useCrediReporte } from '../hooks/useCrediReporte';
 import Table from '@/components/Table.vue';
+import Decimal from 'decimal.js-light'
 import { format } from 'date-fns';
 import { formatMoneda } from '../../../../../lib/formatMoneda';
 import Loading from '../../../../../components/Loading.vue';

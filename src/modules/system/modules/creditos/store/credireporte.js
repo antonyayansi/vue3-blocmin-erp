@@ -39,7 +39,19 @@ export const credireporte = defineStore("credireporte", {
             try {
                 const { data } = await baseApi.get("resumenCreditos")
                 if (exportar) {
-                    await exportToExcel(data, `libro_de_ingreso_${new Date().getTime()}`)
+                    await exportToExcel(data.map(item => ({
+                        'Fecha': format(new Date(item.Fecha_Desembolso), 'dd/MM/yyyy'),
+                        'Nombres': item.Nombre,
+                        'DNI': item.DNI,
+                        'Monto': Number(item.Monto),
+                        'N° de Cuotas': Number(item.Total_Cuotas),
+                        'Debe': Number(item.Total_Cuotas) - Number(item.Cuotas_Pagadas),
+                        'Cuotas Pagadas': Number(item.Cuotas_Pagadas),
+                        'Monto Cuota 1': Number(item.Monto_Cuota),
+                        'Saldo Capital': Number(item.Saldo_Capital),
+                        'Interes': Number(item.Interes),
+                        'Saldo Pagado': Number(item.Saldo_Pagado)
+                    })), `libro_de_ingreso_${new Date().getTime()}`)
                 } else {
                     this.libroingresos = data
                     this.libroingresos_filtrado = data

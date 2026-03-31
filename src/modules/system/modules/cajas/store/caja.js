@@ -46,7 +46,7 @@ export const caja = defineStore("caja", {
             this.isLoading = true;
             try {
                 const { data } = await baseApi.get(`cajas/${id}`);
-                this.new_caja = data;
+                this.new_caja = {...data};
                 this.new_caja.id = id;
             } catch (e) {
                 toast.error(e.response.data.message);

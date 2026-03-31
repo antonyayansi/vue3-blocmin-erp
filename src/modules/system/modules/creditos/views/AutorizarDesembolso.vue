@@ -17,6 +17,7 @@
                     <Select :options="[
                         { codigo: 'pendiente', descripcion: 'Pendientes' },
                         { codigo: 'aprobado', descripcion: 'Aprobados' },
+                        { codigo: 'rechazado', descripcion: 'Rechazados' },
                     ]" mode="offline" v-model="pag.estado" @selected="changePage(1)" />
                 </div>
             </div>
@@ -55,11 +56,11 @@
                         <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300 text-right">{{
                             formatMoneda(credito.tem) }} %</td>
                         <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300 text-center">
-                            <Tag :value="credito.estado == 'aprobado' ? 'Aprobado' : 'Pendiente'"
-                                :severity="credito.estado == 'aprobado' ? 'success' : 'warn'" size="small" />
+                            <Tag :value="tag[credito.estado]?.label || 'Pendiente'"
+                                :severity="tag[credito.estado]?.severity || 'warn'" size="small" />
                         </td>
                         <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300">
-                            <div v-if="credito.estado == 'pendiente'" class="flex space-x-2 justify-end">
+                            <div v-if="credito.estado != 'aprobado'" class="flex space-x-2 justify-end">
                                 <Button @click="getCronogramaPDF(credito.id)" icon="pi pi-print" variant="outlined"
                                     severity="info" size="small" />
                                 <Button @click="openAutorizacion(credito, 'Aprobacion')" icon="pi pi-check-circle"
@@ -132,6 +133,12 @@ import Select from '@/components/Select.vue'
 import { format } from 'date-fns'
 import { formatMoneda } from '@/lib/formatMoneda'
 import useCredito from '../hooks/useCredito'
+
+const tag = {
+    'pendiente': { label: 'Pendiente', severity: 'warn' },
+    'aprobado': { label: 'Aprobado', severity: 'success' },
+    'rechazado': { label: 'Rechazado', severity: 'danger' },
+}
 
 const {
     getCronogramaPDF,

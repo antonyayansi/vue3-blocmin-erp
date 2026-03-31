@@ -71,10 +71,10 @@ const printCronograma01Old = async (empresa, credito, cliente, cronograma) => {
     }
 
     // Calcular totales
-    const totalCapital = cronograma.reduce((sum, item) => new Decimal(sum).add(new Decimal(item.capital)).toNumber(), 0);
-    const totalInteres = cronograma.reduce((sum, item) => new Decimal(sum).add(new Decimal(item.interes)).toNumber(), 0);
     const totalComision = cronograma.reduce((sum, item) => new Decimal(sum).add(new Decimal(item.comision)).toNumber(), 0);
     const totalCuota = cronograma.reduce((sum, item) => new Decimal(sum).add(new Decimal(item.cuota)).toNumber(), 0);
+    const totalAhorro = cronograma.reduce((sum, item) => new Decimal(sum).add(new Decimal(item.ahorros)).toNumber(), 0);
+    const totalInteres = new Decimal(totalCuota).sub(new Decimal(credito.importe)).sub(new Decimal(totalAhorro)).toNumber();
 
     options.startY = 80;
     autoTable(doc, {
@@ -95,8 +95,8 @@ const printCronograma01Old = async (empresa, credito, cliente, cronograma) => {
         foot: [[
             { content: 'TOTAL', colSpan: 4, styles: { halign: 'right', fontStyle: 'bold' } },
             { content: formatMoneda(credito?.importe ?? 0), styles: { halign: 'right', fontStyle: 'bold' } },
-            { content: formatMoneda(credito?.interes ?? 0), styles: { halign: 'right', fontStyle: 'bold' } },
-            { content: formatMoneda(totalComision), styles: { halign: 'right', fontStyle: 'bold' } },
+            { content: formatMoneda(totalInteres), styles: { halign: 'right', fontStyle: 'bold' } },
+            { content: formatMoneda(totalAhorro), styles: { halign: 'right', fontStyle: 'bold' } },
             { content: formatMoneda(totalCuota), styles: { halign: 'right', fontStyle: 'bold' } }
         ]],
         ...options,
@@ -113,21 +113,6 @@ const printCronograma01Old = async (empresa, credito, cliente, cronograma) => {
         },
 
     });
-
-    //resumen depues de la tabla
-    // let y = doc.lastAutoTable.finalY + 5
-
-    // let aporte = new Decimal(credito.aporte).toNumber()
-    // let importe_total = new Decimal(credito.importe ?? 0).add(new Decimal(credito.interes)).add(new Decimal(credito.aporte)).toNumber()
-    // let total_comision = new Decimal(credito.comision ?? 0).times(new Decimal(credito.nro_cuotas)).toNumber()
-    // let total_ahorros = new Decimal(credito.ahorros ?? 0).times(new Decimal(credito.nro_cuotas)).toNumber()
-
-    // doc.setFontSize(10)
-    // doc.text(`Total de intereses: ${formatMoneda(credito.interes)}`, 10, y + 5)
-    // doc.text(`Total de capital: ${formatMoneda(credito.importe)}`, 10, y + 10)
-    // doc.text(`Aporte: ${formatMoneda(aporte)}`, 10, y + 15)
-    // doc.text(`Importe a pagar: ${formatMoneda(importe_total)}`, 10, y + 20)
-    // doc.text(`Total de ahorros ${formatMoneda(total_ahorros)}`, 10, y + 25)
 
     var pageCount = doc.internal.getNumberOfPages();
 

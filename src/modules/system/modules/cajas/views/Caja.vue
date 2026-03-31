@@ -42,9 +42,12 @@
                             <p class="text-xs text-zinc-500">{{
                                 caja.created_at ? format(new Date(caja.created_at), 'HH:mm a') : '' }}</p>
                         </td>
-                        <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300">{{
-                            caja.created_at ? format(new Date(caja.updated_at), 'dd/MM/yyyy') : '' }}
-                            <p class="text-xs text-zinc-500">{{
+                        <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300">
+                            <p v-if="caja.updated_at != caja.created_at">
+                                {{caja.created_at ? format(new Date(caja.updated_at), 'dd/MM/yyyy') : '' }}
+                            </p>
+                            <p v-if="caja.updated_at != caja.created_at"
+                                class="text-xs text-zinc-500">{{
                                 caja.created_at ? format(new Date(caja.updated_at), 'HH:mm a') : '' }}</p>
                         </td>
                         <td class="px-2 py-1 text-zinc-700 dark:text-zinc-300 text-right font-bold">{{
@@ -102,6 +105,9 @@
             <ul class="my-3">
                 <li class="text-green-500"><i class="pi pi-caret-down" /> Ingresos: <strong>{{
                     formatMoneda(new_caja?.ingresos) }}</strong>
+                </li>
+                <li v-if="new_caja?.total_mora" class="text-green-500"><i class="pi pi-caret-down" /> Total Mora: <strong>{{
+                    formatMoneda(new_caja?.total_mora) }}</strong>
                 </li>
                 <li class="text-red-500"><i class="pi pi-caret-up" /> Salidas: <strong>{{
                     formatMoneda(new_caja?.salidas) }}</strong></li>

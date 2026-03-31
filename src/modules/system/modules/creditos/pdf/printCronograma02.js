@@ -73,10 +73,9 @@ const printCronograma02 = async (empresa, credito, cliente, cronograma) => {
     }
 
     // Calcular totales
-    const totalCapital = cronograma.reduce((sum, item) => new Decimal(sum).add(new Decimal(item.capital)).toNumber(), 0);
-    const totalInteres = cronograma.reduce((sum, item) => new Decimal(sum).add(new Decimal(item.interes)).toNumber(), 0);
-    const totalComision = cronograma.reduce((sum, item) => new Decimal(sum).add(new Decimal(item.comision ?? item.ahorros ?? 0)).toNumber(), 0);
     const totalCuota = cronograma.reduce((sum, item) => new Decimal(sum).add(new Decimal(item.cuota)).toNumber(), 0);
+    const totalAhorro = cronograma.reduce((sum, item) => new Decimal(sum).add(new Decimal(item.ahorros)).toNumber(), 0);
+    const totalInteres = new Decimal(totalCuota).sub(new Decimal(credito.importe)).sub(new Decimal(totalAhorro)).toNumber();
 
     options.startY = 80;
     autoTable(doc, {
@@ -98,8 +97,8 @@ const printCronograma02 = async (empresa, credito, cliente, cronograma) => {
         foot: [[
             { content: 'TOTAL', colSpan: 4, styles: { halign: 'right', fontStyle: 'bold' } },
             { content: formatMoneda(credito?.importe ?? 0), styles: { halign: 'right', fontStyle: 'bold' } },
-            { content: formatMoneda(credito?.interes ?? 0), styles: { halign: 'right', fontStyle: 'bold' } },
-            { content: formatMoneda(totalComision), styles: { halign: 'right', fontStyle: 'bold' } },
+            { content: formatMoneda(totalInteres), styles: { halign: 'right', fontStyle: 'bold' } },
+            { content: formatMoneda(totalAhorro), styles: { halign: 'right', fontStyle: 'bold' } },
             { content: formatMoneda(totalCuota), styles: { halign: 'right', fontStyle: 'bold' } },
             { content: '', styles: { halign: 'center' } }
         ]],

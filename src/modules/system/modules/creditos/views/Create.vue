@@ -209,6 +209,16 @@ const keyTasaEAandEM = () => {
     let importe = parseFloat(new_credito.value.importe);
 
     if (cuota_definida > 0 && nro_cuotas > 0 && importe > 0) {
+        // Caso especial: cuando solo hay 1 cuota
+        if (nro_cuotas === 1) {
+            // Fórmula simplificada: importe = cuota / (1 + TEM)
+            // Por lo tanto: TEM = (cuota / importe - 1)
+            let tem = (cuota_definida / importe - 1);
+            new_credito.value.tem = (tem * 100).toFixed(4);
+            calcularTEA();
+            return;
+        }
+
         // Calcular TEM usando método de Newton-Raphson para encontrar la tasa
         // Fórmula: P = C * [(1 - (1 + i)^-n) / i]
         // Donde P = importe, C = cuota, n = nro_cuotas, i = TEM
