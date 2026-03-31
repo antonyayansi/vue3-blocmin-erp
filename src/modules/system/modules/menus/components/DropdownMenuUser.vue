@@ -6,13 +6,10 @@
         </div>
         <div>
             <div class="flex space-x-2 items-center justify-center">
-                <button v-if="estado == 1" @click="desactivarMenuUser(menuuser_id)" class="text-2xl text-green-500">
-                    <i class="pi pi-check-circle" />
-                </button>
-                <button v-if="estado == 0" @click="activarMenuUser(menuempresa_id)"
-                    class="text-2xl hover:text-green-500 dark:hover:text-green-500 dark:text-zinc-500  ">
-                    <i class="pi pi-check-circle" />
-                </button>
+                <ToggleSwitch
+                    :modelValue="estado == 1"
+                    @update:modelValue="val => val ? activarMenuUser(menuempresa_id) : desactivarMenuUser(menuuser_id)"
+                />
             </div>
         </div>
     </div>
@@ -23,14 +20,10 @@
                     <h1 class="text-zinc-700 text-sm dark:text-zinc-300  "><i :class="`pi ${menu.icon}`" /> {{ menu.name
                     }}</h1>
                     <div class="flex space-x-2 items-center justify-center">
-                        <button v-if="menu.estado == 1" @click="desactivarMenuUser(menu.menuuser_id)"
-                            class="text-2xl text-green-500">
-                            <i class="pi pi-check-circle" />
-                        </button>
-                        <button v-if="menu.estado == 0" @click="activarMenuUser(menu.menuempresa_id)"
-                            class="text-2xl hover:text-green-500 dark:hover:text-green-500 dark:text-zinc-500  ">
-                            <i class="pi pi-check-circle" />
-                        </button>
+                        <ToggleSwitch
+                            :modelValue="menu.estado == 1"
+                            @update:modelValue="val => val ? activarMenuUser(menu.menuempresa_id) : desactivarMenuUser(menu.menuuser_id)"
+                        />
                     </div>
                 </div>
             </li>
@@ -40,7 +33,9 @@
 
 <script setup>
 import { ref } from 'vue';
+import { ToggleSwitch } from 'primevue';
 import useMenuUser from '../hooks/useMenuUser'
+import Loading from '../../../../../components/Loading.vue';
 
 const {
     activarMenuUser,

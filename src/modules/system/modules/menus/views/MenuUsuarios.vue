@@ -12,6 +12,7 @@
                 :icon="menu.icon" :estado="menu.estado" />
         </div>
     </div>
+    <Loading :show="isLoading" />
 </template>
 
 <script setup>
@@ -19,13 +20,15 @@ import { onMounted, watch } from 'vue';
 import useMenuUser from '../hooks/useMenuUser';
 import Select from '@/components/Select.vue'
 import DropdownMenuUser from '../components/DropdownMenuUser.vue';
+import Loading from '../../../../../components/Loading.vue';
 
 const {
     menuuser,
     getMenuUser,
     userscombo,
     user_id,
-    getUsersCombo
+    getUsersCombo,
+    isLoading
 } = useMenuUser();
 
 watch(

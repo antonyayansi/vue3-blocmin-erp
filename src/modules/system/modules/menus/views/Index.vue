@@ -2,70 +2,50 @@
     <Dialog v-model:visible="openmodal" modal :header="menu_id == null ? 'Nuevo menu' : 'Editar menu'">
         <form v-if="menu_id == null" @submit.prevent="postMenu()">
             <div class="mb-4">
-                <div class="my-2 flex flex-wrap">
-                    <div class="w-full md:w-1/2 pr-0 md:pr-2">
-                        <label for="" class="text-sm text-zinc-500">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="">
+                        <label for="" class="mb-1 font-medium text-xs text-zinc-500">
                             Nombre
                         </label>
-                        <input placeholder="Nombre" v-model="new_menu.name" type="text"
-                            class="w-full outline-none px-2 py-1 bg-white dark:bg-zinc-950 dark:border-zinc-700 dark:text-zinc-200 rounded-md focus:ring-1 focus:ring-primary-500 border  ">
+                        <InputText size="small" v-model="new_menu.name" fluid placeholder="Nombre" />
                     </div>
-                    <div class="w-full md:w-1/2">
-                        <label for="" class="text-sm text-zinc-500">
+                    <div class="">
+                        <label for="" class="mb-1 font-medium text-xs text-zinc-500">
                             Icono <a class="text-primary-500" href="https://fontawesome.com/search"
                                 target="_blank">Librería
-                                <fa icon="arrow-up-right-from-square" />
+                                <i class="pi pi-link" />
                             </a>
                         </label>
-                        <input placeholder="Icono" v-model="new_menu.icon" type="text"
-                            class="w-full outline-none px-2 py-1 bg-white dark:bg-zinc-950 dark:border-zinc-700 dark:text-zinc-200 rounded-md focus:ring-1 focus:ring-primary-500 border  ">
+                        <InputText size="small" v-model="new_menu.icon" fluid placeholder="Icono" />
                     </div>
                 </div>
             </div>
             <div class="py-2 flex justify-end space-x-2">
-                <button type="button" @click="openmodal = false"
-                    class="text-zinc-600 dark:text-zinc-400 py-1 px-2 rounded-md  ">
-                    Cancelar
-                </button>
-                <button :disabled="isLoading" :class="{ 'opacity-50': isLoading }" type="submit"
-                    class="text-white bg-primary-500 hover:bg-primary-500_hover py-1 px-2 rounded-md  ">
-                    <fa icon="save" />
-                    Guardar
-                </button>
+                <Button size="small" severity="primary" label="Guardar" :loading="isLoading" type="submit" />
             </div>
         </form>
         <form v-else @submit.prevent="putMenu()">
             <div class="mb-4">
-                <div class="my-2 flex flex-wrap">
-                    <div class="w-full md:w-1/2 space-y-1 pr-0 md:pr-2">
-                        <label for="" class="text-xs text-zinc-500">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="">
+                        <label for="" class="mb-2 font-medium text-xs text-zinc-500">
                             Nombre
                         </label>
-                        <input placeholder="Nombre" v-model="new_menu.name" type="text"
-                            class="w-full outline-none p-2 bg-white dark:bg-zinc-950 dark:border-zinc-700 dark:text-zinc-200 rounded-md focus:ring-2 focus:ring-primary-500 border  ">
+                        <InputText size="small" v-model="new_menu.name" fluid placeholder="Nombre" />
                     </div>
-                    <div class="w-full md:w-1/2 space-y-1">
-                        <label for="" class="text-xs text-zinc-500">
+                    <div class="">
+                        <label for="" class="mb-2 font-medium text-xs text-zinc-500">
                             Icono <a class="text-primary-500" href="https://fontawesome.com/icon"
                                 target="_blank">Librería
-                                <fa icon="arrow-up-right-from-square" />
+                                <i class="pi pi-link" />
                             </a>
                         </label>
-                        <input placeholder="Icono" v-model="new_menu.icon" type="text"
-                            class="w-full outline-none p-2 bg-white dark:bg-zinc-950 dark:border-zinc-700 dark:text-zinc-200 rounded-md focus:ring-2 focus:ring-primary-500 border  ">
+                        <InputText size="small" v-model="new_menu.icon" fluid placeholder="Icono" />
                     </div>
                 </div>
             </div>
             <div class="py-2 flex justify-end space-x-2">
-                <button type="button" @click="openmodal = false"
-                    class="text-zinc-600 dark:text-zinc-400 font-medium py-1 px-2 rounded-md  ">
-                    Cancelar
-                </button>
-                <button :disabled="isLoading" :class="{ 'opacity-50': isLoading }" type="submit"
-                    class="text-white bg-primary-500 hover:bg-primary-500_hover font-medium py-1 px-2 rounded-md  ">
-                    <fa icon="save" />
-                    Modificar
-                </button>
+                <Button :loading="isLoading" size="small" type="submit" label="Modificar" severity="primary" />
             </div>
         </form>
     </Dialog>
@@ -82,14 +62,19 @@
                 :icon="menu.icon" @edit="editMenu(menu)" />
         </div>
     </div>
+    <Loading :show="isLoading" />
 </template>
 
 <script setup>
 import { onMounted } from 'vue';
 import useMenus from '../hooks/useMenus';
 import Dropdown from '../components/Dropdown.vue';
-import Dialog from 'primevue/dialog';
-import Button from 'primevue/button';
+import Loading from '../../../../../components/Loading.vue';
+import {
+    Dialog,
+    Button,
+    InputText
+} from 'primevue'
 
 const {
     isLoading,

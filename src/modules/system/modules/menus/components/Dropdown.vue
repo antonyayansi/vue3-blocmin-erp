@@ -1,98 +1,110 @@
 <template>
-    <Dialog v-model:visible="openmodal" :header="submenu_id == null ? 'Nuevo Submenu' : 'Editar Submenu'">
+    <Dialog v-model:visible="openmodal" :header="submenu_id == null ? 'Nuevo Submenu' : 'Editar Submenu'" modal>
         <form v-if="submenu_id == null" @submit.prevent="onSubmit()">
             <div class="mb-4">
-                <div class="flex flex-wrap">
-                    <div class="w-full md:w-1/2 pr-0 md:pr-2">
-                        <label for="" class="text-sm text-zinc-500">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="">
+                        <label for="" class="mb-1 text-xs font-medium text-zinc-500">
                             Nombre
                         </label>
-                        <input placeholder="Nombre" v-model="new_menu.name" type="text"
-                            class="w-full outline-none px-2 py-1 bg-white dark:bg-zinc-950 dark:border-zinc-700 dark:text-zinc-200 rounded-md focus:ring-1 focus:ring-primary-500 border  ">
+                        <InputText 
+                            size="small"
+                            v-model="new_menu.name"
+                            fluid
+                            placeholder="Nombre"
+                        />
                     </div>
-                    <div class="w-full md:w-1/2">
-                        <label for="" class="text-sm text-zinc-500">
+                    <div class="">
+                        <label for="" class="mb-1 text-xs font-medium text-zinc-500">
                             Icono <a class="text-primary-500" href="https://primevue.org/icons/"
                                 target="_blank">Librería
                             </a>
                         </label>
-                        <input placeholder="Icono" v-model="new_menu.icon" type="text"
-                            class="w-full outline-none px-2 py-1 bg-white dark:bg-zinc-950 dark:border-zinc-700 dark:text-zinc-200 rounded-md focus:ring-1 focus:ring-primary-500 border  ">
+                        <InputText 
+                            size="small"
+                            v-model="new_menu.icon"
+                            fluid
+                            placeholder="Icono"
+                        />
                     </div>
-                    <div class="w-full md:w-1/2 pr-0 md:pr-2">
-                        <label for="" class="text-sm text-zinc-500">
+                    <div class="">
+                        <label for="" class="mb-1 text-xs font-medium text-zinc-500">
                             URL / Ruta
                         </label>
-                        <input placeholder="/url" v-model="new_menu.url" type="text"
-                            class="w-full outline-none px-2 py-1 bg-white dark:bg-zinc-950 dark:border-zinc-700 dark:text-zinc-200 rounded-md focus:ring-1 focus:ring-primary-500 border  ">
+                        <InputText 
+                            size="small"
+                            v-model="new_menu.url"
+                            fluid
+                            placeholder="/url"
+                        />
                     </div>
                 </div>
             </div>
             <div class="py-2 flex justify-end space-x-2">
-                <button type="button" @click="openmodal = false"
-                    class="text-zinc-600 dark:text-zinc-400 font-medium py-1 px-2 rounded-md  ">
-                    Cancelar
-                </button>
-                <button :disabled="isLoading" :class="{ 'opacity-50': isLoading }" type="submit"
-                    class="text-white bg-primary-500 hover:bg-primary-500_hover font-medium py-1 px-2 rounded-md  ">
-                    <fa icon="save" />
-                    Guardar
-                </button>
+                <Button size="small" type="button" label="Cancelar" @click="openmodal = false" severity="secondary"/>
+                <Button :loading="isLoading" size="small" type="submit" label="Guardar" severity="primary"/>
             </div>
         </form>
         <form v-else @submit.prevent="onPutSubmit()">
             <div class="mb-4">
-                <div class="my-2 flex flex-wrap">
-                    <div class="w-full md:w-1/2 pr-0 md:pr-2">
-                        <label for="" class="text-sm text-zinc-500">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="">
+                        <label for="" class="mb-1 text-xs font-medium text-zinc-500">
                             Nombre
                         </label>
-                        <input placeholder="Nombre" v-model="new_menu.name" type="text"
-                            class="w-full outline-none px-2 py-1 bg-white dark:bg-zinc-950 dark:border-zinc-700 dark:text-zinc-200 rounded-md focus:ring-1 focus:ring-primary-500 border  ">
+                        <InputText 
+                            size="small"
+                            v-model="new_menu.name"
+                            fluid
+                            placeholder="Nombre"
+                        />
                     </div>
-                    <div class="w-full md:w-1/2">
-                        <label for="" class="text-sm text-zinc-500">
+                    <div class="">
+                        <label for="" class="mb-1 text-xs font-medium text-zinc-500">
                             Icono <a class="text-primary-500" href="https://fontawesome.com/search"
                                 target="_blank">Librería
-                                <fa icon="arrow-up-right-from-square" />
+                                <i class="pi pi-link" />
                             </a>
                         </label>
-                        <input placeholder="Icono" v-model="new_menu.icon" type="text"
-                            class="w-full outline-none px-2 py-1 bg-white dark:bg-zinc-950 dark:border-zinc-700 dark:text-zinc-200 rounded-md focus:ring-1 focus:ring-primary-500 border  ">
+                        <InputText 
+                            size="small"
+                            v-model="new_menu.icon"
+                            fluid
+                            placeholder="Icono"
+                        />
                     </div>
-                    <div class="w-full md:w-1/2 pr-0 md:pr-2">
-                        <label for="" class="text-sm text-zinc-500">
+                    <div class="">
+                        <label for="" class="mb-1 text-xs font-medium text-zinc-500">
                             URL / Ruta
                         </label>
-                        <input placeholder="/url" v-model="new_menu.url" type="text"
-                            class="w-full outline-none px-2 py-1 bg-white dark:bg-zinc-950 dark:border-zinc-700 dark:text-zinc-200 rounded-md focus:ring-1 focus:ring-primary-500 border  ">
+                        <InputText 
+                            size="small"
+                            v-model="new_menu.url"
+                            fluid
+                            placeholder="/url"
+                        />
                     </div>
                 </div>
             </div>
             <div class="py-2 flex justify-end space-x-2">
-                <button type="button" @click="openmodal = false"
-                    class="text-zinc-600 dark:text-zinc-400 py-1 px-2 rounded-md  ">
-                    Cancelar
-                </button>
-                <button :disabled="isLoading" :class="{ 'opacity-50': isLoading }" type="submit"
-                    class="text-white bg-primary-500 hover:bg-primary-500_hover py-1 px-2 rounded-md  ">
-                    <fa icon="save" />
-                    Modificar
-                </button>
+                <Button 
+                    label="Modificar"
+                    :loading="isLoading"
+                    size="small"
+                    type="submit"
+                    severity="primary"
+                />
             </div>
         </form>
     </Dialog>
     <div @click.self="open = !open"
-        class="w-full rounded-md items-center my-2 border-l-4 border-primary-500 bg-white text-zinc-800 dark:text-zinc-200 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-700 cursor-pointer flex justify-between px-4 py-2  ">
+        class="w-full rounded-md items-center my-2 border-l-4 bg-white text-zinc-800 dark:text-zinc-200 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-700 cursor-pointer flex justify-between px-4 py-2  ">
         <div @click="open = !open">
             <h1><i :class="`pi ${icon}`" /> {{ name }}</h1>
         </div>
         <div>
             <div class="flex space-x-2 items-center justify-center">
-                <button @click="onEdit"
-                    class="rounded-full border border-zinc-200 dark:border-zinc-600 text-primary-500 hover:text-white hover:bg-primary-500 border-primary-500 px-2 py-1 text-sm font-medium  ">
-                    Editar
-                </button>
+                <Button label="Editar" severity="warning" size="small" variant="text" @click="onEdit" />
             </div>
         </div>
     </div>
@@ -100,7 +112,7 @@
         <ul class="">
             <li v-for="menu in menus" :key="menu.id">
                 <div
-                    class="flex justify-between items-center border-b py-2 px-4 hover:bg-zinc-100 dark:hover:bg-zinc-900 dark:border-zinc-700">
+                    class="flex justify-between items-center border-b py-2 px-4 hover:bg-zinc-100 dark:hover:bg-zinc-900 dark:border-zinc-700 border-zinc-200">
                     <h1 class="text-zinc-700 text-sm dark:text-zinc-300  "><i :class="`pi ${menu.icon}`" /> {{ menu.name
                     }}</h1>
                     <div class="flex space-x-2 items-center justify-center">
@@ -121,8 +133,11 @@
 <script setup>
 import { ref } from 'vue';
 import useMenus from '../hooks/useMenus';
-import Dialog from 'primevue/dialog';
-import Button from 'primevue/button';
+import {
+    Button,
+    Dialog,
+    InputText
+} from 'primevue'
 
 
 const props = defineProps({

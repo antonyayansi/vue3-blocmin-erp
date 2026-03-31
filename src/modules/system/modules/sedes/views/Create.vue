@@ -76,15 +76,15 @@
                             <div class="mt-2 ">
                                 <table class="w-full">
                                     <thead>
-                                        <tr>
+                                        <tr class="">
                                             <th
-                                                class="bg-white px-2 dark:bg-zinc-800 text-gray-700 dark:text-zinc-300   text-left border-b dark:border-zinc-700 py-2">
+                                                class="bg-zinc-100 px-2 dark:bg-zinc-800 text-gray-700 dark:text-zinc-300 text-left border-b border-zinc-200 dark:border-zinc-700 py-2">
                                                 Tipo de documento</th>
                                             <th
-                                                class="bg-white px-2 dark:bg-zinc-800 text-gray-700 dark:text-zinc-300   text-left border-b dark:border-zinc-700 py-2">
+                                                class="bg-zinc-100 px-2 dark:bg-zinc-800 text-gray-700 dark:text-zinc-300 text-left border-b border-zinc-200 dark:border-zinc-700 py-2">
                                                 Serie</th>
                                             <th
-                                                class="bg-white px-2 dark:bg-zinc-800 text-gray-700 dark:text-zinc-300    border-b dark:border-zinc-700 py-2">
+                                                class="bg-zinc-100 px-2 dark:bg-zinc-800 text-gray-700 dark:text-zinc-300  border-b border-zinc-200 dark:border-zinc-700 py-2">
                                                 Acciones</th>
                                         </tr>
                                     </thead>

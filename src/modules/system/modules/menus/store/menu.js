@@ -19,8 +19,15 @@ export const menu = defineStore('menu', {
     }),
     actions: {
         async getMenu() {
-            const { data } = await baseApi.get('/menus')
-            this.menus_all = data
+            this.isLoading = true
+            try{
+                const { data } = await baseApi.get('/menus')
+                this.menus_all = data
+            }catch(e){
+                toast.error(e.response.data.message)
+            }finally{
+                this.isLoading = false
+            }
         },
         async postMenu() {
             this.isLoading = true

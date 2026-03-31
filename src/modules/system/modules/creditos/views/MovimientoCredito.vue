@@ -100,4 +100,6 @@ const changeCant = async (cant) => {
     pag.value.cant_reg = cant
     await changePage(1)
 }
+
+getMovimientosCredito()
 </script>

@@ -12,6 +12,7 @@
                 :menuempresa_id="menu.menuempresa_id" :name="menu.name" :icon="menu.icon" :estado="menu.estado" />
         </div>
     </div>
+    <Loading :show="isLoading" />
 </template>
 
 <script setup>
@@ -19,13 +20,15 @@ import { onMounted, watch } from 'vue';
 import useMenuEmpresa from '../hooks/useMenuEmpresa';
 import DropdownMenu from '../components/DropdownMenu.vue';
 import Select from '@/components/Select.vue';
+import Loading from '../../../../../components/Loading.vue';
 
 const {
     empresa_id,
     empresas_combo,
     menus_empresa,
     getEmpresasCombo,
-    getMenusEmpresa
+    getMenusEmpresa,
+    isLoading
 } = useMenuEmpresa()
 
 watch(
