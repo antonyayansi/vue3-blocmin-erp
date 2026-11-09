@@ -3,6 +3,7 @@ import { jwtVerify } from "jose";
 import { secret } from "../lib/jwt";
 
 let empresaId = "";
+const token = localStorage.getItem("bloc-token") || "";
 
 const storedEmpresa = localStorage.getItem("bloc-empresa");
 if (storedEmpresa) {
@@ -30,25 +31,37 @@ if (storedSede) {
 export const baseApi = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
-    Authorization: `Bearer ${localStorage.getItem("bloc-token") || ""}`,
     "X-Empresa": empresaId,
     "X-Sede": sedeId,
+    "X-Access-Token" : token
   },
 });
 
-//interceptors
+// Apache/cPanel strips Authorization. Also send token as query param
+// (works even with cached CORS preflights that block custom headers).
+baseApi.interceptors.request.use((config) => {
+  
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+    config.headers["X-Access-Token"] = token;
+    config.headers.Application = `Bearer ${token}`;
+    config.params = { ...(config.params || {}), token };
+  }
+  return config;
+});
+
 baseApi.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem('bloc-user');
-      localStorage.removeItem('bloc-token');
-      localStorage.removeItem('bloc-empresa');
-      localStorage.removeItem('bloc-menu');
-      localStorage.removeItem('bloc-sede');
-      location.href = '/login';
+      localStorage.removeItem("bloc-user");
+      localStorage.removeItem("bloc-token");
+      localStorage.removeItem("bloc-empresa");
+      localStorage.removeItem("bloc-menu");
+      localStorage.removeItem("bloc-sede");
+      location.href = "/login";
     }
     return Promise.reject(error);
   }

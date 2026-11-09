@@ -62,7 +62,7 @@
     <!-- Panel Derecho (Informativo) -->
     <div class="hidden md:flex md:w-1/2 bg-primary-600 text-white items-center justify-center px-10">
       <div class="text-center space-y-2">
-        <h2 class="text-2xl font-semibold leading-tight">Blocmin ERP - 2025</h2>
+        <h2 class="text-2xl font-semibold leading-tight">Blocmin ERP - 2026</h2>
         <p class="text-sm opacity-80">Sistema de gestión empresarial todo en uno.</p>
         <p class="text-sm opacity-80">Optimiza tus operaciones, mejora la productividad y toma decisiones informadas con nuestra solución integral.</p>
         <p class="text-sm opacity-80">Gestiona inventarios, ventas, compras, finanzas y más desde una única plataforma.</p>
